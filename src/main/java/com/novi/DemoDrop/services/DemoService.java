@@ -1,9 +1,11 @@
 package com.novi.DemoDrop.services;
 
 import com.novi.DemoDrop.Dto.OutputDto.DemoOutputDto;
+import com.novi.DemoDrop.exceptions.RecordNotFoundException;
 import com.novi.DemoDrop.repositories.DemoRepository;
 import com.novi.DemoDrop.Dto.InputDto.DemoInputDto;
 import com.novi.DemoDrop.models.Demo;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -34,7 +36,7 @@ public class DemoService {
         Optional<Demo> demoOptional = demoRepository.findById(id);
 
         if(demoOptional.isEmpty()) {
-            // TO-DO: throw an exception
+            throw new RecordNotFoundException("No record found with this id");
         }
         Demo d = demoOptional.get();
         return makeTheDto(d);
@@ -43,9 +45,21 @@ public class DemoService {
     public DemoOutputDto createDemo(DemoInputDto demoInputDto) {
         Demo d = new Demo();
         d = setOrUpdateDemoObject(demoInputDto, d);
-        demoRepository.save(d);
-        return makeTheDto(d);
+        try {
+            demoRepository.save(d);
+            return makeTheDto(d);
+        }catch (DataIntegrityViolationException e){
+            throw new RecordNotFoundException("Error saving demo to database");
+        }
+    }
 
+    public boolean deleteDemo(Long id) {
+        if (demoRepository.findById(id).isPresent()) {
+            demoRepository.deleteById(id);
+            return true;
+        } else {
+            throw new RecordNotFoundException("No record found with this id");
+        }
     }
 
     public DemoOutputDto makeTheDto (Demo d) {
@@ -69,13 +83,5 @@ public class DemoService {
     }
 
 
-    public boolean deleteDemo(Long id) {
-        if (demoRepository.findById(id).isPresent()) {
-            demoRepository.deleteById(id);
-            return true;
-        } else {
-            // TO-DO recordnotfoundexception toevoegen en return false weghalen
-            return false;
-        }
-    }
+
 }

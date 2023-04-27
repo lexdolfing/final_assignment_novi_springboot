@@ -2,6 +2,7 @@ package com.novi.DemoDrop.controllers;
 
 import com.novi.DemoDrop.Dto.InputDto.DemoInputDto;
 import com.novi.DemoDrop.Dto.OutputDto.DemoOutputDto;
+import com.novi.DemoDrop.exceptions.RecordNotFoundException;
 import com.novi.DemoDrop.services.DemoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,16 +44,13 @@ public class DemoController {
         if (isDeleted) {
             return ResponseEntity.ok().body("Element is deleted");
         } else {
-            // TO-DO throw exception en haal return weg
-            return ResponseEntity.ok().body("grapje toch niet gelukt");
+            throw new RecordNotFoundException("No record found with this id");
         }
 
     }
 
 
     // Nog toe te voegen requests:
-    // Delete demo request
     // update demo request (maar echt?)
-    // get demo by id
-    // get demo info (id, artistname and songname and email - voor de reactie)
+    // get demo info (id, artistname and songname and email - voor de reactie) Maar misschien moet deze in de ReplyToDemoKlasse?
 }
