@@ -69,4 +69,13 @@ public class DemoService {
     }
 
 
+    public boolean deleteDemo(Long id) {
+        if (demoRepository.findById(id).isPresent()) {
+            demoRepository.deleteById(id);
+            return true;
+        } else {
+            // TO-DO recordnotfoundexception toevoegen en return false weghalen
+            return false;
+        }
+    }
 }

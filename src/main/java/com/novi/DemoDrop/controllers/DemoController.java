@@ -37,9 +37,22 @@ public class DemoController {
         return ResponseEntity.ok(demoOutputDto);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> removeDemo (@PathVariable Long id) {
+        boolean isDeleted = demoService.deleteDemo(id);
+        if (isDeleted) {
+            return ResponseEntity.ok().body("Element is deleted");
+        } else {
+            // TO-DO throw exception en haal return weg
+            return ResponseEntity.ok().body("grapje toch niet gelukt");
+        }
+
+    }
+
+
     // Nog toe te voegen requests:
     // Delete demo request
-    // update demo request
+    // update demo request (maar echt?)
     // get demo by id
     // get demo info (id, artistname and songname and email - voor de reactie)
 }
