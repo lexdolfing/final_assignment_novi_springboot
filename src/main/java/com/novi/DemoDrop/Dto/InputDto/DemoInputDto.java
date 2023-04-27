@@ -1,8 +1,6 @@
-package com.novi.DemoDrop.Dto;
+package com.novi.DemoDrop.Dto.InputDto;
 
-import jakarta.persistence.Column;
-
-public class DemoDto {
+public class DemoInputDto {
     private Long id;
 
     private String artistName;
@@ -11,7 +9,7 @@ public class DemoDto {
     private byte[] mp3File;
     private String songElaboration;
 
-    public DemoDto() {
+    public DemoInputDto() {
     }
 
     public Long getId() {
