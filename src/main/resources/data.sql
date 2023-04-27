@@ -1,0 +1,1 @@
+INSERT INTO demos (id, email) VALUES (1, 'test@email.com');

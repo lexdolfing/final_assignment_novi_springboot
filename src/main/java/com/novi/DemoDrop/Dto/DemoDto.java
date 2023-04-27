@@ -1,30 +1,18 @@
-package com.novi.DemoDrop.models;
+package com.novi.DemoDrop.Dto;
 
-import jakarta.persistence.*;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
+import jakarta.persistence.Column;
 
-//TO-DO
-// 1. voeg oneToMany relatie toe met DJ
-// 2. oneToOne relatie met ReplyToDemo
-@Entity
-@Table (name= "demos")
-public class Demo {
-
-    @Id
-    @GeneratedValue
+public class DemoDto {
     private Long id;
-    @Column(name= "artist_name")
+
     private String artistName;
-    @Column(name= "song_name")
     private String songName;
-    @Column(name= "email")
     private String email;
-    @Column(name= "mp3_file")
     private byte[] mp3File;
-    @Column(name= "song_elaboration")
     private String songElaboration;
 
-    public Demo() {}
+    public DemoDto() {
+    }
 
     public Long getId() {
         return id;

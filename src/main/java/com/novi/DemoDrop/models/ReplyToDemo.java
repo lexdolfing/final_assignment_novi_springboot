@@ -6,7 +6,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 // To-Do:
-// 1. Voeg oneToMany Relatie toe met DJ, of oneToOne met Demo
+// 1. Voeg oneToOne relatie toe met Demo
 // 2. Voeg relatie toe met Admin (oneToMany)
 
 @Entity
