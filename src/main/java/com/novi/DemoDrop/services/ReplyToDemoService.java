@@ -52,6 +52,16 @@ public class ReplyToDemoService {
         }
     }
 
+    public boolean deleteReply(Long id) {
+        if (replyToDemoRepository.findById(id).isPresent()) {
+            replyToDemoRepository.deleteById(id);
+            return true;
+        } else {
+            throw new RecordNotFoundException("No record found with this id");
+        }
+
+    }
+
     public ReplyToDemoOutputDto makeTheDto (ReplyToDemo r) {
         ReplyToDemoOutputDto replyToDemoOutputDto = new ReplyToDemoOutputDto();
         replyToDemoOutputDto.setId(r.getId());

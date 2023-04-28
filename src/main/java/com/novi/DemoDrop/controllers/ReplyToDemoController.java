@@ -2,6 +2,7 @@ package com.novi.DemoDrop.controllers;
 
 import com.novi.DemoDrop.Dto.InputDto.ReplyToDemoInputDto;
 import com.novi.DemoDrop.Dto.OutputDto.ReplyToDemoOutputDto;
+import com.novi.DemoDrop.exceptions.RecordNotFoundException;
 import com.novi.DemoDrop.services.ReplyToDemoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,12 +36,22 @@ public class ReplyToDemoController {
         return ResponseEntity.ok().body(replyToDemoOutputDto);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deleteReply(@PathVariable Long id) {
+        boolean isDeleted = replyToDemoService.deleteReply(id);
+        if (isDeleted) {
+            return  ResponseEntity.ok().body("Element is deleted");
+        } else {
+            throw new RecordNotFoundException("No record found with this id");
+        }
+    }
+
 
 
     //Welke requests gaan hiervoor nodig zijn?
     // 1. v get request voor de DJ (en voor admin?)
     // 2. v Post request voor admin
-    // 3. update request voor admin
+    // 3. v update request voor admin
     // 4. delete request voor admin
     // 5. Moet er een algemene get request komen? Volgens mij niet
 
