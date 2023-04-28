@@ -29,9 +29,17 @@ public class ReplyToDemoController {
         return ResponseEntity.ok(replyToDemoOutputDto);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<ReplyToDemoOutputDto> updateReply(@PathVariable Long id, @RequestBody ReplyToDemoInputDto replyToDemoInputDto) {
+        ReplyToDemoOutputDto replyToDemoOutputDto = replyToDemoService.updateReply(id, replyToDemoInputDto);
+        return ResponseEntity.ok().body(replyToDemoOutputDto);
+    }
+
+
+
     //Welke requests gaan hiervoor nodig zijn?
     // 1. v get request voor de DJ (en voor admin?)
-    // 2. Post request voor admin
+    // 2. v Post request voor admin
     // 3. update request voor admin
     // 4. delete request voor admin
     // 5. Moet er een algemene get request komen? Volgens mij niet

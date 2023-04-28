@@ -7,6 +7,7 @@ import com.novi.DemoDrop.models.ReplyToDemo;
 import com.novi.DemoDrop.repositories.ReplyToDemoRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.Optional;
 @Service
@@ -39,6 +40,18 @@ public class ReplyToDemoService {
         }
     }
 
+    public ReplyToDemoOutputDto updateReply(Long id, ReplyToDemoInputDto replyToDemoInputDto) {
+        Optional<ReplyToDemo> replyToDemoOptional = replyToDemoRepository.findById(id);
+        if (replyToDemoOptional.isPresent()) {
+            ReplyToDemo r = replyToDemoOptional.get();
+            r = setOrUpdateReplyObject(replyToDemoInputDto, r);
+            replyToDemoRepository.save(r);
+            return makeTheDto(r);
+        } else {
+            throw new RecordNotFoundException("No reply with this id was found");
+        }
+    }
+
     public ReplyToDemoOutputDto makeTheDto (ReplyToDemo r) {
         ReplyToDemoOutputDto replyToDemoOutputDto = new ReplyToDemoOutputDto();
         replyToDemoOutputDto.setId(r.getId());
@@ -49,7 +62,6 @@ public class ReplyToDemoService {
     }
 
     public ReplyToDemo setOrUpdateReplyObject (ReplyToDemoInputDto replyToDemoInputDto, ReplyToDemo r) {
-        r.setId(replyToDemoInputDto.getId());
         r.setAdminDecision(replyToDemoInputDto.getAdminDecision());
         r.setHasBeenRepliedTo(replyToDemoInputDto.isHasBeenRepliedTo());
         r.setAdminComments(replyToDemoInputDto.getAdminComments());

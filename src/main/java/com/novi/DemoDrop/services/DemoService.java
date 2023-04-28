@@ -74,7 +74,6 @@ public class DemoService {
     }
 
     public Demo setOrUpdateDemoObject (DemoInputDto demoInputDto, Demo d) {
-        d.setId(demoInputDto.getId());
         d.setArtistName(demoInputDto.getArtistName());
         d.setEmail(demoInputDto.getEmail());
         d.setSongName(demoInputDto.getSongName());
