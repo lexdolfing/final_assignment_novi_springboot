@@ -35,7 +35,7 @@ public class DemoService {
     public DemoOutputDto getDemoById(Long id) {
         Optional<Demo> demoOptional = demoRepository.findById(id);
 
-        if(demoOptional.isEmpty()) {
+        if (demoOptional.isEmpty()) {
             throw new RecordNotFoundException("No record found with this id");
         }
         Demo d = demoOptional.get();
@@ -48,7 +48,7 @@ public class DemoService {
         try {
             demoRepository.save(d);
             return makeTheDto(d);
-        }catch (DataIntegrityViolationException e){
+        }catch (DataIntegrityViolationException e) {
             throw new RecordNotFoundException("Error saving demo to database");
         }
     }
@@ -74,6 +74,7 @@ public class DemoService {
     }
 
     public Demo setOrUpdateDemoObject (DemoInputDto demoInputDto, Demo d) {
+        d.setId(demoInputDto.getId());
         d.setArtistName(demoInputDto.getArtistName());
         d.setEmail(demoInputDto.getEmail());
         d.setSongName(demoInputDto.getSongName());

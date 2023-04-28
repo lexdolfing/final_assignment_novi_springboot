@@ -19,7 +19,7 @@ public class DemoController {
         this.demoService = demoService;
     }
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<List<DemoOutputDto>> getAllDemos() {
         List<DemoOutputDto> demoOutputDtos = demoService.getAllDemos();
         return ResponseEntity.ok(demoOutputDtos);
