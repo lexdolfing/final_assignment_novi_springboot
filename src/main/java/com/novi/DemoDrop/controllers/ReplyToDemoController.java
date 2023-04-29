@@ -52,7 +52,7 @@ public class ReplyToDemoController {
     // 1. v get request voor de DJ (en voor admin?)
     // 2. v Post request voor admin
     // 3. v update request voor admin
-    // 4. delete request voor admin
+    // 4. v delete request voor admin
     // 5. Moet er een algemene get request komen? Volgens mij niet
 
 
