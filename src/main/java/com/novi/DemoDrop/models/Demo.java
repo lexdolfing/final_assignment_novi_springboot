@@ -24,6 +24,9 @@ public class Demo {
     @Column(name= "song_elaboration")
     private String songElaboration;
 
+    @OneToOne(mappedBy = "replyToDemo")
+    private ReplyToDemo replyToDemo;
+
     public Demo() {}
 
     public Long getId() {
@@ -50,6 +53,10 @@ public class Demo {
         return songElaboration;
     }
 
+    public ReplyToDemo getReplyToDemo() {
+        return replyToDemo;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -72,5 +79,9 @@ public class Demo {
 
     public void setSongElaboration(String songElaboration) {
         this.songElaboration = songElaboration;
+    }
+
+    public void setReplyToDemo(ReplyToDemo replyToDemo) {
+        this.replyToDemo = replyToDemo;
     }
 }

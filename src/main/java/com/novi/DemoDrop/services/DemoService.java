@@ -70,8 +70,12 @@ public class DemoService {
         demoOutputDto.setSongName(d.getSongName());
         demoOutputDto.setMp3File(d.getMp3File());
         demoOutputDto.setSongElaboration(d.getSongElaboration());
+        demoOutputDto.setReplyToDemo(d.getReplyToDemo());
         return demoOutputDto;
     }
+
+    // Bij update van demo, moet hier een getReplyToDemo uit de inputDto komen?
+    // dwz, als een reply aan een demo toegewezen wordt, moet hier de demo geupdate worden?
 
     public Demo setOrUpdateDemoObject (DemoInputDto demoInputDto, Demo d) {
         d.setArtistName(demoInputDto.getArtistName());

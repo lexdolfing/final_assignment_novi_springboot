@@ -1,10 +1,13 @@
 package com.novi.DemoDrop.Dto.OutputDto;
 
+import com.novi.DemoDrop.models.Demo;
+
 public class ReplyToDemoOutputDto {
     private Long id;
     private String adminDecision;
     private String adminComments;
     private boolean hasBeenRepliedTo;
+    private Demo demo;
 
     public ReplyToDemoOutputDto() {
     }
@@ -25,6 +28,10 @@ public class ReplyToDemoOutputDto {
         return hasBeenRepliedTo;
     }
 
+    public Demo getDemo() {
+        return demo;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -39,5 +46,9 @@ public class ReplyToDemoOutputDto {
 
     public void setHasBeenRepliedTo(boolean hasBeenRepliedTo) {
         this.hasBeenRepliedTo = hasBeenRepliedTo;
+    }
+
+    public void setDemo(Demo demo) {
+        this.demo = demo;
     }
 }

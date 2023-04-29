@@ -1,9 +1,6 @@
 package com.novi.DemoDrop.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 // To-Do:
 // 1. Voeg oneToOne relatie toe met Demo
@@ -18,6 +15,10 @@ public class ReplyToDemo {
     private String adminDecision;
     private String adminComments;
     private boolean hasBeenRepliedTo;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private Demo demo;
+
 
     public ReplyToDemo() {
     }
@@ -38,6 +39,10 @@ public class ReplyToDemo {
         return hasBeenRepliedTo;
     }
 
+    public Demo getDemo() {
+        return demo;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -52,5 +57,9 @@ public class ReplyToDemo {
 
     public void setHasBeenRepliedTo(boolean hasBeenRepliedTo) {
         this.hasBeenRepliedTo = hasBeenRepliedTo;
+    }
+
+    public void setDemo(Demo demo) {
+        this.demo = demo;
     }
 }
