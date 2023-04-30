@@ -16,7 +16,7 @@ public class ReplyToDemo {
     private String adminComments;
     private boolean hasBeenRepliedTo;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "replyToDemo")
     private Demo demo;
 
 

@@ -1,6 +1,7 @@
 package com.novi.DemoDrop.controllers;
 
 import com.novi.DemoDrop.Dto.InputDto.DemoInputDto;
+import com.novi.DemoDrop.Dto.InputDto.IdInputDto;
 import com.novi.DemoDrop.Dto.OutputDto.DemoOutputDto;
 import com.novi.DemoDrop.exceptions.RecordNotFoundException;
 import com.novi.DemoDrop.services.DemoService;
@@ -47,6 +48,11 @@ public class DemoController {
             throw new RecordNotFoundException("No record found with this id");
         }
 
+    }
+    // voeg nog @Valid toe voor @RequestBody als validation dependency geinjecteerd is
+    @PutMapping("/{id}/reply-to-demo")
+    public void assignRemoteControllerToTelevision (@PathVariable("id") Long id, @RequestBody IdInputDto input) {
+        demoService.assignReplyToDemo(id, input.id);
     }
 
 

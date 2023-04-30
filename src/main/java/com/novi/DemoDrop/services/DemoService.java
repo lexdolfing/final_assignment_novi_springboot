@@ -2,9 +2,11 @@ package com.novi.DemoDrop.services;
 
 import com.novi.DemoDrop.Dto.OutputDto.DemoOutputDto;
 import com.novi.DemoDrop.exceptions.RecordNotFoundException;
+import com.novi.DemoDrop.models.ReplyToDemo;
 import com.novi.DemoDrop.repositories.DemoRepository;
 import com.novi.DemoDrop.Dto.InputDto.DemoInputDto;
 import com.novi.DemoDrop.models.Demo;
+import com.novi.DemoDrop.repositories.ReplyToDemoRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +18,11 @@ import java.util.Optional;
 public class DemoService {
 
     private final DemoRepository demoRepository;
+    private final ReplyToDemoRepository replyToDemoRepository;
 
-    public DemoService(DemoRepository demoRepository) {
+    public DemoService(DemoRepository demoRepository, ReplyToDemoRepository replyToDemoRepository) {
         this.demoRepository = demoRepository;
+        this.replyToDemoRepository = replyToDemoRepository;
     }
 
     public List<DemoOutputDto> getAllDemos() {
@@ -60,6 +64,28 @@ public class DemoService {
         } else {
             throw new RecordNotFoundException("No record found with this id");
         }
+    }
+
+    public void assignReplyToDemo(Long DemoId, Long ReplyId) {
+        // haal Demo object op
+        Optional<Demo> demoOptional= demoRepository.findById(DemoId);
+        // haal Reply object op
+        Optional<ReplyToDemo> replyToDemoOptional = replyToDemoRepository.findById(ReplyId);
+
+
+        // Als die allenbei bestaan dan
+        if(demoOptional.isPresent() && replyToDemoOptional.isPresent()) {
+            // stop ze in een normaal object
+            Demo d = demoOptional.get();
+            ReplyToDemo r = replyToDemoOptional.get();
+            // set remote controller bij television. Dus nu heeft television object x een remotecontroller y in zijn tabel staan.
+            d.setReplyToDemo(r);
+            // sla television op
+            demoRepository.save(d);
+        } else {
+            throw new RecordNotFoundException();
+        }
+
     }
 
     public DemoOutputDto makeTheDto (Demo d) {

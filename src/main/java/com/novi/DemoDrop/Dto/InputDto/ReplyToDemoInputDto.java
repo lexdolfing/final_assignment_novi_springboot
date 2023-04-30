@@ -9,6 +9,7 @@ public class ReplyToDemoInputDto {
     private String adminComments;
     private boolean hasBeenRepliedTo;
 
+
     private Demo demo;
 
     public ReplyToDemoInputDto() {
@@ -33,6 +34,7 @@ public class ReplyToDemoInputDto {
     public Demo getDemo() {
         return demo;
     }
+
 
     public void setId(Long id) {
         this.id = id;

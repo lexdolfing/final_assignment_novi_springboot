@@ -24,7 +24,7 @@ public class Demo {
     @Column(name= "song_elaboration")
     private String songElaboration;
 
-    @OneToOne(mappedBy = "replyToDemo")
+    @OneToOne(cascade = CascadeType.PERSIST)
     private ReplyToDemo replyToDemo;
 
     public Demo() {}

@@ -44,19 +44,22 @@ public class ReplyToDemoService {
         }
     }
 
-    public ReplyToDemoOutputDto createAndAssignReply(Long id, ReplyToDemoInputDto replyToDemoInputDto){
-        ReplyToDemo r = new ReplyToDemo();
-        r = setOrUpdateReplyObject(replyToDemoInputDto, r);
-        Optional<Demo> optionalDemo = (demoRepository.findById(id));
-        if (optionalDemo.isPresent()) {
-            Demo d = optionalDemo.get();
-            r.setDemo(d);
-            replyToDemoRepository.save(r);
-            return makeTheDto(r);
-        } else {
-            throw new RecordNotFoundException("No demo with this id found, cannot assign reply");
-        }
-    }
+
+//
+//    public ReplyToDemoOutputDto createAndAssignReply(Long id, ReplyToDemoInputDto replyToDemoInputDto) {
+//        ReplyToDemo r = new ReplyToDemo();
+//        r = setOrUpdateReplyObject(replyToDemoInputDto, r);
+//        Optional<Demo> optionalDemo = (demoRepository.findById(id));
+//        if (optionalDemo.isPresent()) {
+//            Demo d = optionalDemo.get();
+//            replyToDemoRepository.save(r);
+//            d.setReplyToDemo(r);
+//            demoRepository.save(d);
+//            return makeTheDto(r);
+//        } else {
+//            throw new RecordNotFoundException("No demo with this id found, cannot assign reply");
+//        }
+//    }
 
     public ReplyToDemoOutputDto updateReply(Long id, ReplyToDemoInputDto replyToDemoInputDto) {
         Optional<ReplyToDemo> replyToDemoOptional = replyToDemoRepository.findById(id);
