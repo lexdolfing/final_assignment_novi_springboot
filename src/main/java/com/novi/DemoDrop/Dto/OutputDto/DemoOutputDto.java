@@ -10,7 +10,7 @@ public class DemoOutputDto {
     private String email;
     private byte[] mp3File;
     private String songElaboration;
-    private ReplyToDemo replyToDemo;
+    private Long replyToDemoId;
 
     public DemoOutputDto() {
     }
@@ -39,8 +39,8 @@ public class DemoOutputDto {
         return songElaboration;
     }
 
-    public ReplyToDemo getReplyToDemo() {
-        return replyToDemo;
+    public Long getReplyToDemoId() {
+        return replyToDemoId;
     }
 
     public void setId(Long id) {
@@ -67,7 +67,7 @@ public class DemoOutputDto {
         this.songElaboration = songElaboration;
     }
 
-    public void setReplyToDemo(ReplyToDemo replyToDemo) {
-        this.replyToDemo = replyToDemo;
+    public void setReplyToDemoId(Long replyToDemoId) {
+        this.replyToDemoId = replyToDemoId;
     }
 }

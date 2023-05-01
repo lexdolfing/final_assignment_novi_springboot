@@ -20,9 +20,12 @@ public class DemoService {
     private final DemoRepository demoRepository;
     private final ReplyToDemoRepository replyToDemoRepository;
 
-    public DemoService(DemoRepository demoRepository, ReplyToDemoRepository replyToDemoRepository) {
+    private final ReplyToDemoService replyToDemoService;
+
+    public DemoService(DemoRepository demoRepository, ReplyToDemoRepository replyToDemoRepository, ReplyToDemoService replyToDemoService) {
         this.demoRepository = demoRepository;
         this.replyToDemoRepository = replyToDemoRepository;
+        this.replyToDemoService = replyToDemoService;
     }
 
     public List<DemoOutputDto> getAllDemos() {
@@ -72,7 +75,6 @@ public class DemoService {
         // haal Reply object op
         Optional<ReplyToDemo> replyToDemoOptional = replyToDemoRepository.findById(ReplyId);
 
-
         // Als die allenbei bestaan dan
         if(demoOptional.isPresent() && replyToDemoOptional.isPresent()) {
             // stop ze in een normaal object
@@ -96,7 +98,9 @@ public class DemoService {
         demoOutputDto.setSongName(d.getSongName());
         demoOutputDto.setMp3File(d.getMp3File());
         demoOutputDto.setSongElaboration(d.getSongElaboration());
-        demoOutputDto.setReplyToDemo(d.getReplyToDemo());
+        if (d.getReplyToDemo() != null) {
+            demoOutputDto.setReplyToDemoId(d.getReplyToDemo().getId());
+        }
         return demoOutputDto;
     }
 

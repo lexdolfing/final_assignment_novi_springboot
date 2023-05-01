@@ -11,7 +11,6 @@ public class DemoInputDto {
     private byte[] mp3File;
     private String songElaboration;
 
-    private ReplyToDemo replyToDemo;
 
 
     public DemoInputDto() {
@@ -39,14 +38,6 @@ public class DemoInputDto {
 
     public String getSongElaboration() {
         return songElaboration;
-    }
-
-    public ReplyToDemo getReplyToDemo() {
-        return replyToDemo;
-    }
-
-    public void setReplyToDemo(ReplyToDemo replyToDemo) {
-        this.replyToDemo = replyToDemo;
     }
 
     public void setId(Long id) {
