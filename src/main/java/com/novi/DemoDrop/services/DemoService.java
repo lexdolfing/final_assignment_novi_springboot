@@ -82,8 +82,10 @@ public class DemoService {
             ReplyToDemo r = replyToDemoOptional.get();
             // set remote controller bij television. Dus nu heeft television object x een remotecontroller y in zijn tabel staan.
             d.setReplyToDemo(r);
+            r.setDemo(d);
             // sla television op
             demoRepository.save(d);
+            replyToDemoRepository.save(r);
         } else {
             throw new RecordNotFoundException();
         }

@@ -49,7 +49,8 @@ public class DemoController {
         }
 
     }
-    // voeg nog @Valid toe voor @RequestBody als validation dependency geinjecteerd is
+    // TO-DO: voeg nog @Valid toe voor @RequestBody als validation dependency geinjecteerd is
+    // this method assigns an existing reply to a demo
     @PutMapping("/{id}/reply-to-demo")
     public void assignRemoteControllerToTelevision (@PathVariable("id") Long id, @RequestBody IdInputDto input) {
         demoService.assignReplyToDemo(id, input.id);

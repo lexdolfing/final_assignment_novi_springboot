@@ -37,7 +37,6 @@ public class ReplyToDemoController {
         return ResponseEntity.ok(replyToDemoOutputDto);
     }
 
-    // This method assigns an existing reply to an existing demo.
     @PutMapping("/{id}")
     public ResponseEntity<ReplyToDemoOutputDto> updateReply(@PathVariable Long id, @RequestBody ReplyToDemoInputDto replyToDemoInputDto) {
         ReplyToDemoOutputDto replyToDemoOutputDto = replyToDemoService.updateReply(id, replyToDemoInputDto);

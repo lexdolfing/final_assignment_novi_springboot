@@ -7,7 +7,8 @@ public class ReplyToDemoOutputDto {
     private String adminDecision;
     private String adminComments;
     private boolean hasBeenRepliedTo;
-    private Demo demo;
+
+    private Long demoID;
 
     public ReplyToDemoOutputDto() {
     }
@@ -28,8 +29,8 @@ public class ReplyToDemoOutputDto {
         return hasBeenRepliedTo;
     }
 
-    public Demo getDemo() {
-        return demo;
+    public Long getDemoID() {
+        return demoID;
     }
 
     public void setId(Long id) {
@@ -48,7 +49,7 @@ public class ReplyToDemoOutputDto {
         this.hasBeenRepliedTo = hasBeenRepliedTo;
     }
 
-    public void setDemo(Demo demo) {
-        this.demo = demo;
+    public void setDemoID(Long demoID) {
+        this.demoID = demoID;
     }
 }
