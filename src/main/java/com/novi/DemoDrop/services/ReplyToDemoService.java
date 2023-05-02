@@ -89,15 +89,27 @@ public class ReplyToDemoService {
         replyToDemoOutputDto.setHasBeenRepliedTo(r.isHasBeenRepliedTo());
         replyToDemoOutputDto.setAdminComments(r.getAdminComments());
         replyToDemoOutputDto.setAdminDecision(r.getAdminDecision());
-        replyToDemoOutputDto.setDemoID(r.getDemo().getId());
+        if(r.getDemo() != null) {
+            replyToDemoOutputDto.setDemoID(r.getDemo().getId());
+        }
         return replyToDemoOutputDto;
     }
 
     public ReplyToDemo setOrUpdateReplyObject (ReplyToDemoInputDto replyToDemoInputDto, ReplyToDemo r) {
-        r.setAdminDecision(replyToDemoInputDto.getAdminDecision());
-        r.setHasBeenRepliedTo(replyToDemoInputDto.isHasBeenRepliedTo());
-        r.setAdminComments(replyToDemoInputDto.getAdminComments());
-        r.setDemo(replyToDemoInputDto.getDemo());
+        if(replyToDemoInputDto.getAdminDecision() != null) {
+            r.setAdminDecision(replyToDemoInputDto.getAdminDecision());
+        }
+        if(replyToDemoInputDto.isHasBeenRepliedTo()) {
+            r.setHasBeenRepliedTo(replyToDemoInputDto.isHasBeenRepliedTo());
+        }
+        if(replyToDemoInputDto.getAdminComments() != null) {
+            r.setAdminComments(replyToDemoInputDto.getAdminComments());
+        }
+        if(replyToDemoInputDto.getDemo() != null ) {
+            r.setDemo(replyToDemoInputDto.getDemo());
+        }
+
         return r;
     }
 }
+

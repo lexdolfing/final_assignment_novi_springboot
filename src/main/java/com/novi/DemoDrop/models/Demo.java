@@ -26,6 +26,11 @@ public class Demo {
 
     @OneToOne(cascade = CascadeType.PERSIST)
     private ReplyToDemo replyToDemo;
+    @ManyToOne
+    private DJ dj;
+    @ManyToOne
+    private TalentManager talentManager;
+
 
     public Demo() {}
 
