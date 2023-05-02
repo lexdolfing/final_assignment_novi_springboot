@@ -89,7 +89,9 @@ public class ReplyToDemoService {
         replyToDemoOutputDto.setHasBeenRepliedTo(r.isHasBeenRepliedTo());
         replyToDemoOutputDto.setAdminComments(r.getAdminComments());
         replyToDemoOutputDto.setAdminDecision(r.getAdminDecision());
-        replyToDemoOutputDto.setDemoID(r.getDemo().getId());
+        if (r.getDemo() != null) {
+            replyToDemoOutputDto.setDemoID(r.getDemo().getId());
+        }
         return replyToDemoOutputDto;
     }
 
