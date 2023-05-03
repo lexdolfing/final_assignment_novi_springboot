@@ -11,7 +11,7 @@ public class Role {
 
     private String roleName;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne
     private User user;
 
     public Role() {

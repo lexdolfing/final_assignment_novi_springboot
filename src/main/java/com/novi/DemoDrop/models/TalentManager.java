@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
+@Table(name="talentmanagers")
 public class TalentManager extends Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -13,9 +14,6 @@ public class TalentManager extends Account {
 
     @OneToMany(mappedBy = "talentManager")
     private List<Demo> assignedDemos;
-
-    @OneToOne(mappedBy = "talentManager")
-    private User user;
 
     public TalentManager() {
     }
@@ -32,10 +30,6 @@ public class TalentManager extends Account {
         return assignedDemos;
     }
 
-    public User getUser() {
-        return user;
-    }
-
     public void setId(Long id) {
         this.id = id;
     }
@@ -46,9 +40,5 @@ public class TalentManager extends Account {
 
     public void setAssignedDemos(List<Demo> assignedDemos) {
         this.assignedDemos = assignedDemos;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 }

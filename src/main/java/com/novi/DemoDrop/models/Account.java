@@ -6,6 +6,9 @@ public class Account {
     private String firstName;
     private String lastName;
 
+    @OneToOne
+    private User user;
+
 
     public String getFirstName() {
         return firstName;

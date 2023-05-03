@@ -15,8 +15,6 @@ public class UserOutputDto {
 
     private String roleName;
 
-    private Long djId;
-    private Long talentManagerId;
 
     public UserOutputDto() {
     }
@@ -37,13 +35,6 @@ public class UserOutputDto {
         return roleName;
     }
 
-    public Long getDjId() {
-        return djId;
-    }
-
-    public Long getTalentManagerId() {
-        return talentManagerId;
-    }
 
     public void setId(Long id) {
         this.id = id;
@@ -59,13 +50,5 @@ public class UserOutputDto {
 
     public void setRoleName(String roleName) {
         this.roleName = roleName;
-    }
-
-    public void setDjId(Long djId) {
-        this.djId = djId;
-    }
-
-    public void setTalentManagerId(Long talentManagerId) {
-        this.talentManagerId = talentManagerId;
     }
 }
