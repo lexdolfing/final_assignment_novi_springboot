@@ -3,11 +3,11 @@ package com.novi.DemoDrop.models;
 import jakarta.persistence.*;
 @MappedSuperclass
 public class Account {
-    private String firstName;
-    private String lastName;
+    protected String firstName;
+    protected String lastName;
 
     @OneToOne
-    private User user;
+    User user;
 
 
     public String getFirstName() {
@@ -27,4 +27,7 @@ public class Account {
         this.lastName = lastName;
     }
 
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

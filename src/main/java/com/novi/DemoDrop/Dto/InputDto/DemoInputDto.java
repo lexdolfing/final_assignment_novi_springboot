@@ -3,7 +3,6 @@ package com.novi.DemoDrop.Dto.InputDto;
 import com.novi.DemoDrop.models.ReplyToDemo;
 
 public class DemoInputDto {
-    private Long id;
 
     private String artistName;
     private String songName;
@@ -14,10 +13,6 @@ public class DemoInputDto {
 
 
     public DemoInputDto() {
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public String getArtistName() {
@@ -38,10 +33,6 @@ public class DemoInputDto {
 
     public String getSongElaboration() {
         return songElaboration;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public void setArtistName(String artistName) {

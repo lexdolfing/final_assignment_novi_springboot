@@ -11,7 +11,7 @@ public class Role {
 
     private String roleName;
 
-    @OneToOne
+    @OneToOne(mappedBy = "role")
     private User user;
 
     public Role() {

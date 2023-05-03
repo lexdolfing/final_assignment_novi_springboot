@@ -4,7 +4,6 @@ import com.novi.DemoDrop.models.Demo;
 import com.novi.DemoDrop.models.ReplyToDemo;
 
 public class ReplyToDemoInputDto {
-    private Long id;
     private String adminDecision;
     private String adminComments;
     private boolean hasBeenRepliedTo;
@@ -13,10 +12,6 @@ public class ReplyToDemoInputDto {
     private Demo demo;
 
     public ReplyToDemoInputDto() {
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public String getAdminDecision() {
@@ -33,11 +28,6 @@ public class ReplyToDemoInputDto {
 
     public Demo getDemo() {
         return demo;
-    }
-
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public void setAdminDecision(String adminDecision) {

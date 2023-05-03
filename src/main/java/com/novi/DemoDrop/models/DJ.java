@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 
 import java.util.List;
 @Entity
-@Table(name="djs")
 public class DJ extends Account{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,8 +15,6 @@ public class DJ extends Account{
     private List<Demo> listOfDemos;
 
     public DJ() {
-        Role role = new Role();
-        role.setRoleName("ROLE_USER");
     }
 
     public Long getId() {
@@ -43,4 +40,9 @@ public class DJ extends Account{
     public void setListOfDemos(List<Demo> listOfDemos) {
         this.listOfDemos = listOfDemos;
     }
+
+    public void setUser(User user) {
+        super.setUser(user);
+    }
+
 }

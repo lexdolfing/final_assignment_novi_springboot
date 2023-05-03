@@ -12,7 +12,7 @@ public class User {
     private String password;
     private String email;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne
     private Role role;
 
 

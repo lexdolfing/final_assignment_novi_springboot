@@ -19,7 +19,6 @@ public class DemoService {
 
     private final DemoRepository demoRepository;
     private final ReplyToDemoRepository replyToDemoRepository;
-
     private final ReplyToDemoService replyToDemoService;
 
     public DemoService(DemoRepository demoRepository, ReplyToDemoRepository replyToDemoRepository, ReplyToDemoService replyToDemoService) {

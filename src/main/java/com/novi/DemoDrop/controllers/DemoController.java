@@ -28,12 +28,12 @@ public class DemoController {
 
     @GetMapping("/{id}")
     public ResponseEntity<DemoOutputDto> getDemoById(@PathVariable Long id) {
-        DemoOutputDto demoOutputDto = new DemoOutputDto();
+        DemoOutputDto demoOutputDto;
         demoOutputDto = demoService.getDemoById(id);
         return ResponseEntity.ok(demoOutputDto);
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<Object> createDemo(@RequestBody DemoInputDto demoInputDto) {
         DemoOutputDto demoOutputDto = demoService.createDemo(demoInputDto);
         return ResponseEntity.ok(demoOutputDto);
