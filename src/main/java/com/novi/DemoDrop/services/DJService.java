@@ -67,6 +67,7 @@ public class DJService {
             throw new RecordNotFoundException("Error saving demo to database");
         }
     }
+// To-DO : hier nog informatie uit User aan toevoegen, zoals e-mailadres? of nooit nodig?
 
     public DJAccountOutputDto makeTheDto (DJ d) {
         DJAccountOutputDto djAccountOutputDto = new DJAccountOutputDto();

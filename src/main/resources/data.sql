@@ -5,3 +5,4 @@ VALUES (2, 'test2@email.com', 'DJ Susanne', 'Electric slide double', 'I was so i
 
 INSERT INTO demo_replies (id, admin_comments, has_been_replied_to) VALUES (1, 'super leuk lied man', true);
 INSERT INTO dj (id, first_name, last_name, artist_name) VALUES (1, 'Lex', 'Dolfing', 'DJ Dolfing');
+INSERT INTO talentmanagers (id, first_name, last_name, manager_name) VALUES (1, 'Annie', 'Schilder', 'Schilder Talents');

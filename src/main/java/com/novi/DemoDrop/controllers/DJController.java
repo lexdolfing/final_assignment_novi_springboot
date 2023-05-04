@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@CrossOrigin
 @RequestMapping("dj")
 @RestController
 public class DJController {
@@ -35,6 +35,11 @@ public class DJController {
         DJAccountOutputDto djAccountOutputDto = djService.createDJ(djAccountInputDto);
         return ResponseEntity.ok(djAccountOutputDto);
     }
+
+
+    // Toevoegen afhankelijk van functies in front-end:
+    // 1. put voor updaten informatie
+    // 2. Delete voor verwijderen account.
 
 
 }
