@@ -19,6 +19,9 @@ public class ReplyToDemo {
     @OneToOne(mappedBy = "replyToDemo")
     private Demo demo;
 
+    @ManyToOne
+    private TalentManager talentManager;
+
 
     public ReplyToDemo() {
     }
@@ -41,6 +44,14 @@ public class ReplyToDemo {
 
     public Demo getDemo() {
         return demo;
+    }
+
+    public TalentManager getTalentManager() {
+        return talentManager;
+    }
+
+    public void setTalentManager(TalentManager talentManager) {
+        this.talentManager = talentManager;
     }
 
     public void setId(Long id) {

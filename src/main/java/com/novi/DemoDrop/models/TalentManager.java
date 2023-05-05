@@ -15,6 +15,9 @@ public class TalentManager extends Account {
     @OneToMany(mappedBy = "talentManager")
     private List<Demo> assignedDemos;
 
+    @OneToMany(mappedBy="talentManager")
+    private List<ReplyToDemo> listOfReplies;
+
     public TalentManager() {
     }
 
@@ -30,6 +33,10 @@ public class TalentManager extends Account {
         return assignedDemos;
     }
 
+    public List<ReplyToDemo> getListOfReplies() {
+        return listOfReplies;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -40,5 +47,17 @@ public class TalentManager extends Account {
 
     public void setAssignedDemos(List<Demo> assignedDemos) {
         this.assignedDemos = assignedDemos;
+    }
+
+    public void setListOfReplies(List<ReplyToDemo> listOfReplies) {
+        this.listOfReplies = listOfReplies;
+    }
+
+    public void addReplyToListOfReplies(ReplyToDemo replyToDemo) {
+        this.listOfReplies.add(replyToDemo);
+    }
+
+    public void addDemoToListOfAssignedDemos(Demo demo) {
+        this.assignedDemos.add(demo);
     }
 }

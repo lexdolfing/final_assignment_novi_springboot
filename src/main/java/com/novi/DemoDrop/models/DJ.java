@@ -1,6 +1,8 @@
 package com.novi.DemoDrop.models;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import java.util.List;
 @Entity
@@ -11,6 +13,7 @@ public class DJ extends Account{
 
     private String artistName;
 
+    @LazyCollection(LazyCollectionOption.FALSE)
     @OneToMany(mappedBy="dj")
     private List<Demo> listOfDemos;
 
@@ -39,6 +42,9 @@ public class DJ extends Account{
 
     public void setListOfDemos(List<Demo> listOfDemos) {
         this.listOfDemos = listOfDemos;
+    }
+    public void addDemoToListOfDemos (Demo demo) {
+        this.listOfDemos.add(demo);
     }
 
     public void setUser(User user) {

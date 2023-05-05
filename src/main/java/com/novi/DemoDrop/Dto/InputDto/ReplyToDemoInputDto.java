@@ -8,6 +8,8 @@ public class ReplyToDemoInputDto {
     private String adminComments;
     private boolean hasBeenRepliedTo;
 
+    private Long talentManagerId;
+
 
     private Demo demo;
 
@@ -30,6 +32,10 @@ public class ReplyToDemoInputDto {
         return demo;
     }
 
+    public Long getTalentManagerId() {
+        return talentManagerId;
+    }
+
     public void setAdminDecision(String adminDecision) {
         this.adminDecision = adminDecision;
     }
@@ -44,5 +50,9 @@ public class ReplyToDemoInputDto {
 
     public void setDemo(Demo demo) {
         this.demo = demo;
+    }
+
+    public void setTalentManagerId(Long talentManagerId) {
+        this.talentManagerId = talentManagerId;
     }
 }

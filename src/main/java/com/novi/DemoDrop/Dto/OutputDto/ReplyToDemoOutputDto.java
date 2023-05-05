@@ -10,6 +10,8 @@ public class ReplyToDemoOutputDto {
 
     private Long demoID;
 
+    private Long talentManagerId;
+
     public ReplyToDemoOutputDto() {
     }
 
@@ -51,5 +53,13 @@ public class ReplyToDemoOutputDto {
 
     public void setDemoID(Long demoID) {
         this.demoID = demoID;
+    }
+
+    public Long getTalentManagerId() {
+        return talentManagerId;
+    }
+
+    public void setTalentManagerId(Long talentManagerId) {
+        this.talentManagerId = talentManagerId;
     }
 }

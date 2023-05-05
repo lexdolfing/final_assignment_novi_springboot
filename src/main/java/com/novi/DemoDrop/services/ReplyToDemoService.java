@@ -5,8 +5,10 @@ import com.novi.DemoDrop.Dto.OutputDto.ReplyToDemoOutputDto;
 import com.novi.DemoDrop.exceptions.RecordNotFoundException;
 import com.novi.DemoDrop.models.Demo;
 import com.novi.DemoDrop.models.ReplyToDemo;
+import com.novi.DemoDrop.models.TalentManager;
 import com.novi.DemoDrop.repositories.DemoRepository;
 import com.novi.DemoDrop.repositories.ReplyToDemoRepository;
+import com.novi.DemoDrop.repositories.TalentManagerRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
@@ -16,10 +18,12 @@ public class ReplyToDemoService {
 
     private final ReplyToDemoRepository replyToDemoRepository;
     private final DemoRepository demoRepository;
+    private final TalentManagerRepository talentManagerRepository;
 
-    public ReplyToDemoService(ReplyToDemoRepository replyToDemoRepository, DemoRepository demoRepository) {
+    public ReplyToDemoService(ReplyToDemoRepository replyToDemoRepository, DemoRepository demoRepository, TalentManagerRepository talentManagerRepository) {
         this.replyToDemoRepository = replyToDemoRepository;
         this.demoRepository = demoRepository;
+        this.talentManagerRepository = talentManagerRepository;
     }
 
 
@@ -45,19 +49,24 @@ public class ReplyToDemoService {
     }
 
 
-
+//TO-DO hier toevoegen dat een reply wordt toegevoegd aan de lijst met replies van de talentmanager.
     public ReplyToDemoOutputDto createAndAssignReply(Long id, ReplyToDemoInputDto replyToDemoInputDto) {
         ReplyToDemo r = new ReplyToDemo();
         r = setOrUpdateReplyObject(replyToDemoInputDto, r);
         Optional<Demo> optionalDemo = (demoRepository.findById(id));
-        if (optionalDemo.isPresent()) {
+        Optional<TalentManager> optionalTalentManager = (talentManagerRepository.findById(replyToDemoInputDto.getTalentManagerId()));
+        if (optionalDemo.isPresent() && optionalTalentManager.isPresent()) {
             Demo d = optionalDemo.get();
+            TalentManager t = optionalTalentManager.get();
+            r.setTalentManager(t);
+            t.addReplyToListOfReplies(r);
             replyToDemoRepository.save(r);
             d.setReplyToDemo(r);
             demoRepository.save(d);
+            talentManagerRepository.save(t);
             return makeTheDto(r);
         } else {
-            throw new RecordNotFoundException("No demo with this id found, cannot assign reply");
+            throw new RecordNotFoundException("No demo and/or talent manager with this id found, cannot assign reply");
         }
     }
 
@@ -91,6 +100,9 @@ public class ReplyToDemoService {
         replyToDemoOutputDto.setAdminDecision(r.getAdminDecision());
         if(r.getDemo() != null) {
             replyToDemoOutputDto.setDemoID(r.getDemo().getId());
+        }
+        if(r.getTalentManager() != null){
+            replyToDemoOutputDto.setTalentManagerId(r.getTalentManager().getId());
         }
         return replyToDemoOutputDto;
     }

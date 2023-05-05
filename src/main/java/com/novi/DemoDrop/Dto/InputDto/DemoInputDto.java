@@ -9,6 +9,7 @@ public class DemoInputDto {
     private String email;
     private byte[] mp3File;
     private String songElaboration;
+    private Long djId;
 
 
 
@@ -53,5 +54,13 @@ public class DemoInputDto {
 
     public void setSongElaboration(String songElaboration) {
         this.songElaboration = songElaboration;
+    }
+
+    public Long getDjId() {
+        return djId;
+    }
+
+    public void setDjId(Long djId) {
+        this.djId = djId;
     }
 }

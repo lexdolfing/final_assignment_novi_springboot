@@ -24,6 +24,7 @@ public class ReplyToDemoController {
         return ResponseEntity.ok(replyToDemoOutputDto);
     }
 
+    // Deze gaat weg, mag nooit gebruikt worden
     @PostMapping
     public ResponseEntity<Object> createReply(@RequestBody ReplyToDemoInputDto replyToDemoInputDto) {
         ReplyToDemoOutputDto replyToDemoOutputDto = replyToDemoService.createReply(replyToDemoInputDto);
