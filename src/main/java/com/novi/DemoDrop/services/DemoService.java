@@ -2,38 +2,51 @@ package com.novi.DemoDrop.services;
 
 import com.novi.DemoDrop.Dto.OutputDto.DemoOutputDto;
 import com.novi.DemoDrop.exceptions.RecordNotFoundException;
-import com.novi.DemoDrop.models.DJ;
-import com.novi.DemoDrop.models.ReplyToDemo;
-import com.novi.DemoDrop.models.TalentManager;
-import com.novi.DemoDrop.repositories.DJRepository;
-import com.novi.DemoDrop.repositories.DemoRepository;
+import com.novi.DemoDrop.models.*;
+import com.novi.DemoDrop.repositories.*;
 import com.novi.DemoDrop.Dto.InputDto.DemoInputDto;
-import com.novi.DemoDrop.models.Demo;
-import com.novi.DemoDrop.repositories.ReplyToDemoRepository;
-import com.novi.DemoDrop.repositories.TalentManagerRepository;
+import org.springframework.core.io.Resource;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.UrlResource;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.*;
 
 @Service
 public class DemoService {
 
     private final DemoRepository demoRepository;
     private final ReplyToDemoRepository replyToDemoRepository;
+
+    // gebruik ik deze niet?
     private final ReplyToDemoService replyToDemoService;
     private final TalentManagerRepository talentManagerRepository;
     private final DJRepository djRepository;
+    private final Path fileStoragePath;
+    private final String fileStorageLocation;
 
-    public DemoService(DemoRepository demoRepository, ReplyToDemoRepository replyToDemoRepository, ReplyToDemoService replyToDemoService, TalentManagerRepository talentManagerRepository, DJRepository djRepository) {
+    public DemoService(DemoRepository demoRepository, ReplyToDemoRepository replyToDemoRepository, ReplyToDemoService replyToDemoService, TalentManagerRepository talentManagerRepository, DJRepository djRepository, @Value("uploads") String fileStorageLocation) {
         this.demoRepository = demoRepository;
         this.replyToDemoRepository = replyToDemoRepository;
         this.replyToDemoService = replyToDemoService;
         this.talentManagerRepository = talentManagerRepository;
         this.djRepository = djRepository;
+        fileStoragePath = Paths.get(fileStorageLocation).toAbsolutePath().normalize();
+        this.fileStorageLocation = fileStorageLocation;
+        try {
+            Files.createDirectories(fileStoragePath);
+        } catch (IOException e) {
+            throw new RuntimeException("Issue in creating file directory");
+        }
     }
 
     public List<DemoOutputDto> getAllDemos() {
@@ -99,13 +112,13 @@ public class DemoService {
 
     }
 
+    // TO-DO mappers bijwerken met file
     public DemoOutputDto makeTheDto(Demo d) {
         DemoOutputDto demoOutputDto = new DemoOutputDto();
         demoOutputDto.setId(d.getId());
         demoOutputDto.setArtistName(d.getArtistName());
         demoOutputDto.setEmail(d.getEmail());
         demoOutputDto.setSongName(d.getSongName());
-        demoOutputDto.setMp3File(d.getMp3File());
         demoOutputDto.setSongElaboration(d.getSongElaboration());
         if (d.getReplyToDemo() != null) {
             demoOutputDto.setReplyToDemoId(d.getReplyToDemo().getId());
@@ -121,7 +134,6 @@ public class DemoService {
         d.setEmail(demoInputDto.getEmail());
         d.setSongName(demoInputDto.getSongName());
         d.setSongElaboration(demoInputDto.getSongElaboration());
-        d.setMp3File(demoInputDto.getMp3File());
         return d;
     }
 
@@ -168,6 +180,60 @@ public class DemoService {
 
         }
         return d;
+    }
+
+    public String storeMP3File(MultipartFile mp3File, Long id) {
+        String fileName = StringUtils.cleanPath(Objects.requireNonNull(mp3File.getOriginalFilename()));
+
+        // path for mac and Linux version:
+        Path filePath = Paths.get(fileStoragePath + "/" + fileName);
+
+        // path for windows version:
+//        Path filePath = Paths.get(fileStoragePath + "\\" + fileName);
+
+        try {
+            Files.copy(mp3File.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            throw new RuntimeException("Issue in storing the file", e);
+        }
+
+        Optional<Demo> optionalDemo = demoRepository.findById(id);
+        if(optionalDemo.isPresent()) {
+            Demo d = optionalDemo.get();
+            d.setFileName(fileName);
+            demoRepository.save(d);
+        } else {
+            throw new RecordNotFoundException("nee");
+        }
+
+        return fileName;
+    }
+
+    public Resource downloadFile(Long id) {
+
+        //demo ophalen ahv id, filenamer eruit, file
+        Optional <Demo> optionalDemo = demoRepository.findById(id);
+        if (optionalDemo.isEmpty()) {
+            throw new RecordNotFoundException("No demo found with this id");
+        }
+        Demo d = optionalDemo.get();
+        String fileName = d.getFileName();
+
+        Path path = Paths.get(fileStorageLocation).toAbsolutePath().resolve(fileName);
+
+        Resource resource;
+
+        try {
+            resource = new UrlResource(path.toUri());
+        } catch (MalformedURLException e) {
+            throw new RuntimeException("Issue in reading the file", e);
+        }
+
+        if(resource.exists()&& resource.isReadable()) {
+            return resource;
+        } else {
+            throw new RuntimeException("the file doesn't exist or not readable");
+        }
     }
 
 }
