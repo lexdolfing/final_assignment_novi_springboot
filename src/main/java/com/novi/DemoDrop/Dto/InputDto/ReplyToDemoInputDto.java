@@ -10,7 +10,6 @@ public class ReplyToDemoInputDto {
 
     private Long talentManagerId;
 
-
     private Demo demo;
 
     public ReplyToDemoInputDto() {
