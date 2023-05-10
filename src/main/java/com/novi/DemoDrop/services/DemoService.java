@@ -24,15 +24,15 @@ import java.util.*;
 @Service
 public class DemoService {
 
-    private final DemoRepository demoRepository;
-    private final ReplyToDemoRepository replyToDemoRepository;
+    private  DemoRepository demoRepository;
+    private  ReplyToDemoRepository replyToDemoRepository;
 
     // gebruik ik deze niet?
-    private final ReplyToDemoService replyToDemoService;
-    private final TalentManagerRepository talentManagerRepository;
-    private final DJRepository djRepository;
-    private final Path fileStoragePath;
-    private final String fileStorageLocation;
+    private  ReplyToDemoService replyToDemoService;
+    private  TalentManagerRepository talentManagerRepository;
+    private  DJRepository djRepository;
+    private Path fileStoragePath;
+    private String fileStorageLocation;
 
     public DemoService(DemoRepository demoRepository, ReplyToDemoRepository replyToDemoRepository, ReplyToDemoService replyToDemoService, TalentManagerRepository talentManagerRepository, DJRepository djRepository, @Value("uploads") String fileStorageLocation) {
         this.demoRepository = demoRepository;
@@ -40,13 +40,31 @@ public class DemoService {
         this.replyToDemoService = replyToDemoService;
         this.talentManagerRepository = talentManagerRepository;
         this.djRepository = djRepository;
-        fileStoragePath = Paths.get(fileStorageLocation).toAbsolutePath().normalize();
+        this.fileStoragePath = Paths.get(fileStorageLocation).toAbsolutePath().normalize();
         this.fileStorageLocation = fileStorageLocation;
         try {
             Files.createDirectories(fileStoragePath);
         } catch (IOException e) {
             throw new RuntimeException("Issue in creating file directory");
         }
+    }
+
+    public DemoService(DemoRepository demoRepository, ReplyToDemoRepository replyToDemoRepository, ReplyToDemoService replyToDemoService, TalentManagerRepository talentManagerRepository, DJRepository djRepository) {
+        this.demoRepository = demoRepository;
+        this.replyToDemoRepository = replyToDemoRepository;
+        this.replyToDemoService = replyToDemoService;
+        this.talentManagerRepository = talentManagerRepository;
+        this.djRepository = djRepository;
+        this.fileStoragePath = Paths.get("uploads").toAbsolutePath().normalize();
+        this.fileStorageLocation = "uploads";
+        try {
+            Files.createDirectories(fileStoragePath);
+        } catch (IOException e) {
+            throw new RuntimeException("Issue in creating file directory");
+        }
+    }
+
+    public DemoService() {
     }
 
     public List<DemoOutputDto> getAllDemos() {

@@ -13,21 +13,24 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+
+import org.aspectj.lang.annotation.Before;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
+import static org.mockito.Mockito.*;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.util.ReflectionTestUtils;
 
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +39,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-@MockitoSettings(strictness = Strictness.LENIENT)
+
+//@MockitoSettings(strictness = Strictness.LENIENT)
 class DemoServiceTest {
 
     @Mock
@@ -49,11 +53,7 @@ class DemoServiceTest {
     TalentManagerRepository talentManagerRepository;
     @Mock
     DJRepository djRepository;
-
-
-    @InjectMocks
     DemoService demoService;
-
     @Captor
     ArgumentCaptor<Demo> captor;
     Demo demo1;
@@ -61,6 +61,9 @@ class DemoServiceTest {
 
     @BeforeEach
     void setUp() {
+
+        demoService = new DemoService(demoRepository, replyToDemoRepository, replyToDemoService, talentManagerRepository, djRepository);
+
         demo1 = new Demo();
         demo1.setId(101L);
         demo1.setArtistName("DJ Lex");
@@ -83,7 +86,7 @@ class DemoServiceTest {
     }
 
     @Test
-    @Disabled
+//    @Disabled
     void getAllDemos() {
         //Arrange -> dit zou de uitkomst van de methode moeten zijn
         when(demoRepository.findAll()).thenReturn(List.of(demo1, demo2));
@@ -94,8 +97,6 @@ class DemoServiceTest {
         //Assert
         assertEquals(demo1.getArtistName(), demosFound.get(0).getArtistName());
         assertEquals(demo2.getArtistName(), demosFound.get(1).getArtistName());
-
-
     }
 
     @Test
