@@ -1,16 +1,15 @@
 package com.novi.DemoDrop.Dto.OutputDto;
 
-import com.novi.DemoDrop.models.ReplyToDemo;
-
 public class DemoOutputDto {
     private Long id;
 
     private String artistName;
     private String songName;
     private String email;
-    private byte[] mp3File;
+    private String fileName;
     private String songElaboration;
     private Long replyToDemoId;
+    private Long DjId;
 
     public DemoOutputDto() {
     }
@@ -31,9 +30,6 @@ public class DemoOutputDto {
         return email;
     }
 
-    public byte[] getMp3File() {
-        return mp3File;
-    }
 
     public String getSongElaboration() {
         return songElaboration;
@@ -59,9 +55,6 @@ public class DemoOutputDto {
         this.email = email;
     }
 
-    public void setMp3File(byte[] mp3File) {
-        this.mp3File = mp3File;
-    }
 
     public void setSongElaboration(String songElaboration) {
         this.songElaboration = songElaboration;
@@ -69,5 +62,21 @@ public class DemoOutputDto {
 
     public void setReplyToDemoId(Long replyToDemoId) {
         this.replyToDemoId = replyToDemoId;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public Long getDjId() {
+        return DjId;
+    }
+
+    public void setDjId(Long djId) {
+        DjId = djId;
     }
 }

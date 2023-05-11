@@ -125,7 +125,7 @@ public class DemoService {
             demoRepository.save(d);
             replyToDemoRepository.save(r);
         } else {
-            throw new RecordNotFoundException();
+            throw new RecordNotFoundException("No demo and/or reply with this id were found");
         }
 
     }
@@ -138,9 +138,14 @@ public class DemoService {
         demoOutputDto.setEmail(d.getEmail());
         demoOutputDto.setSongName(d.getSongName());
         demoOutputDto.setSongElaboration(d.getSongElaboration());
+        demoOutputDto.setDjId(d.getDj().getId());
         if (d.getReplyToDemo() != null) {
             demoOutputDto.setReplyToDemoId(d.getReplyToDemo().getId());
         }
+        if (d.getFileName() != null) {
+            demoOutputDto.setFileName(d.getFileName());
+        }
+
         return demoOutputDto;
     }
 
@@ -221,7 +226,7 @@ public class DemoService {
             d.setFileName(fileName);
             demoRepository.save(d);
         } else {
-            throw new RecordNotFoundException("nee");
+            throw new RecordNotFoundException("No demo found with this id");
         }
 
         return fileName;
