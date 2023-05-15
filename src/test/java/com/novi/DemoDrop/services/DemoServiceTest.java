@@ -11,14 +11,7 @@ import com.novi.DemoDrop.repositories.DJRepository;
 import com.novi.DemoDrop.repositories.DemoRepository;
 import com.novi.DemoDrop.repositories.ReplyToDemoRepository;
 import com.novi.DemoDrop.repositories.TalentManagerRepository;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 
-import org.aspectj.lang.annotation.Before;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
@@ -28,16 +21,13 @@ import static org.mockito.Mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.core.io.Resource;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.multipart.MultipartFile;
+
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -67,7 +57,6 @@ class DemoServiceTest {
     TalentManager talentManager1;
     TalentManager talentManager2;
     ReplyToDemo replyToDemo1;
-    String fileStorageLocation;
 
     @BeforeEach
     void setUp() {
@@ -76,6 +65,7 @@ class DemoServiceTest {
         dJ1 = new DJ();
         dJ1.setId(101L);
         dJ1.setListOfDemos(new ArrayList<>());
+        demoService.setFileStorageLocation("uploads");
 
 
         talentManager1 = new TalentManager();
@@ -107,7 +97,7 @@ class DemoServiceTest {
         demo1.setArtistName("DJ Lex");
         demo1.setSongName("song 1");
         demo1.setEmail("test1@email.com");
-        demo1.setFileName("song1.mp3");
+        demo1.setFileName("test.mp3");
         demo1.setSongElaboration("Mijn eigen lievelings");
         demo1.setDj(dJ1);
 
@@ -156,6 +146,14 @@ class DemoServiceTest {
     }
 
     @Test
+    @DisplayName("empty demo should trigger RecordNotFoundException")
+    void getDemoByIdNotFound () {
+        when(demoRepository.findById(demo1.getId())).thenReturn(Optional.empty());
+        assertThrows(RecordNotFoundException.class, () -> demoService.getDemoById(demo1.getId()));
+
+    }
+
+    @Test
     @DisplayName("DemoInputDto should be returned as DemoOutputDto")
     void createDemo() {
         //Arrange (demo1, demoInputDto1)
@@ -196,6 +194,13 @@ class DemoServiceTest {
     }
 
     @Test
+    @DisplayName("empty demo should trigger RecordNotFoundException")
+    void deleteDemoByIdNotFound () {
+        when(demoRepository.findById(demo1.getId())).thenReturn(Optional.empty());
+        assertThrows(RecordNotFoundException.class, () -> demoService.deleteDemo(demo1.getId()));
+    }
+
+    @Test
     @DisplayName("Should add a replyToDemo to Demo")
     void assignReplyToDemo() {
         //Arrange
@@ -217,6 +222,15 @@ class DemoServiceTest {
         assertEquals(replyToDemo1.getAdminComments(), capturedReply.getAdminComments());
         assertEquals(replyToDemo1, capturedDemo.getReplyToDemo());
 
+    }
+
+    @Test
+    @DisplayName("empty demo should trigger RecordNotFoundException")
+    void assignReplyToDemoByIdNotFound () {
+        when(demoRepository.findById(demo1.getId())).thenReturn(Optional.empty());
+        assertThrows(RecordNotFoundException.class, () -> demoService.assignReplyToDemo(demo1.getId(), replyToDemo1.getId()));
+        when(replyToDemoRepository.findById(replyToDemo1.getId())).thenReturn(Optional.empty());
+        assertThrows(RecordNotFoundException.class, () -> demoService.assignReplyToDemo(demo1.getId(), replyToDemo1.getId()));
     }
 
     @Test
@@ -258,10 +272,15 @@ class DemoServiceTest {
 
 
     @Test
-    @Disabled
-        // TO-DO check of deze nodig is voor line coverage maar hij wordt al helemaal getest lijkt het
     void getRandomNumber() {
-    }
+        int number1 = 1;
+        int number2 = 2;
+
+        int returnedNumber = demoService.getRandomNumber(number1);
+        assertTrue(returnedNumber == number1 || returnedNumber == 0);
+
+        int returnedNumber2 = demoService.getRandomNumber(number2);
+        assertTrue(returnedNumber2 == number1 || returnedNumber2 == number2 || returnedNumber2 == 0);    }
 
     @Test
     @Disabled
@@ -275,20 +294,18 @@ class DemoServiceTest {
         // Set up the mock to throw a DataIntegrityViolationException when talentManagerRepository.save() is called
         doThrow(DataIntegrityViolationException.class).when(talentManagerRepository).save(talentManager1);
 
-        assertThrows(RecordNotFoundException.class, () -> {
-            demoService.addDemoToTalentManager(talentManager1, demo1);
-        });
+        assertThrows(RecordNotFoundException.class, () -> demoService.addDemoToTalentManager(talentManager1, demo1));
 
         // Verify that talentManagerRepository.save() was called
         verify(talentManagerRepository, times(1)).save(talentManager1);
     }
 
     @Test
-    @DisplayName("should throw exception when djRepository.findDjById returns null")
+    @DisplayName("should throw exception when djRepository.findDjById returns empty")
     void assignDemoToDJThrowsException() {
         DemoInputDto demoInputDto = new DemoInputDto();
         demoInputDto.setDjId(101L);
-        when(djRepository.findById(101L)).thenReturn(Optional.ofNullable(null));
+        when(djRepository.findById(101L)).thenReturn(Optional.empty());
         assertThrows(RecordNotFoundException.class, () -> demoService.assignDemoToDJ(demo1, demoInputDto));
     }
 
@@ -300,7 +317,7 @@ class DemoServiceTest {
 
         when(mp3FileMock.getOriginalFilename()).thenReturn(originalFilename);
         when(mp3FileMock.getInputStream()).thenReturn(mock(InputStream.class));
-        when(demoRepository.findById(demo1.getId())).thenReturn(Optional.ofNullable(demo1));
+        when(demoRepository.findById(demo1.getId())).thenReturn(Optional.of(demo1));
         when(demoRepository.save(demo1)).thenReturn(demo1);
 
         String fileName = demoService.storeMP3File(mp3FileMock, demo1.getId());
@@ -312,30 +329,43 @@ class DemoServiceTest {
 
         // Test the method - Exception: IOException
         doThrow(IOException.class).when(mp3FileMock).getInputStream();
-        assertThrows(RuntimeException.class, () -> {
-            demoService.storeMP3File(mp3FileMock, demo1.getId());
-        });
-        
+        assertThrows(RuntimeException.class, () -> demoService.storeMP3File(mp3FileMock, demo1.getId()));
 
     }
-    
+
     @Test
-    void expectvlak(){
-        // Test the method - Exception: RecordNotFoundException
+    @DisplayName("should throw RecordNotFoundException when demo is not found")
+    void storeMP3File_RecordNotFoundException() throws IOException {
         MultipartFile mp3FileMock = mock(MultipartFile.class);
+        String originalFilename = "test.mp3";
+
+        when(mp3FileMock.getOriginalFilename()).thenReturn(originalFilename);
+        when(mp3FileMock.getInputStream()).thenReturn(mock(InputStream.class));
         when(demoRepository.findById(demo1.getId())).thenReturn(Optional.empty());
 
-        // Mock the behavior of demoRepository.save() to throw RecordNotFoundException
-        Mockito.doThrow(RecordNotFoundException.class).when(demoRepository).save(any(Demo.class));
-
         assertThrows(RecordNotFoundException.class, () -> demoService.storeMP3File(mp3FileMock, demo1.getId()));
-
-        // Verify that demoRepository.save() is called once
-        verify(demoRepository, times(1)).save(any(Demo.class));
     }
 
     @Test
-    @Disabled
     void downloadFile() {
+        // Arrange
+        when(demoRepository.findById(demo1.getId())).thenReturn(Optional.ofNullable(demo1));
+
+        // Act
+        Resource foundResource = demoService.downloadFile(demo1.getId());
+
+
+        String expectedResource = "URL [file:///Users/lexdolfing/Documents/Novi/Eindopdracht/Spring%20Boot/DemoDrop/uploads/test.mp3]";
+
+        //Assert
+        assertEquals(foundResource.toString(), expectedResource);
+
+    }
+
+    @Test
+    @DisplayName("empty demo should trigger RecordNotFoundException")
+    void downloadFileDemoByIdNotFound () {
+        when(demoRepository.findById(demo1.getId())).thenReturn(Optional.empty());
+        assertThrows(RecordNotFoundException.class, () -> demoService.downloadFile(demo1.getId()));
     }
 }

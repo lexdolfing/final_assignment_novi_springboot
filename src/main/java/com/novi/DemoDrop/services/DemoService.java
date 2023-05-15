@@ -168,7 +168,7 @@ public class DemoService {
             addDemoToTalentManager(t, d);
         }
         if (talentManagerList.size() > 1) {
-            int talentManagerIndex = (getRandomNumber(talentManagerList.size()) - 1);
+            int talentManagerIndex = (getRandomNumber(talentManagerList.size()-1));
             TalentManager t = talentManagerList.get(talentManagerIndex);
             d.setTalentManager(t);
             addDemoToTalentManager(t, d);
@@ -221,12 +221,13 @@ public class DemoService {
         }
 
         Optional<Demo> optionalDemo = demoRepository.findById(id);
-        if(optionalDemo.isPresent()) {
+        if(optionalDemo.isEmpty()) {
+            throw new RecordNotFoundException("No demo found with this id");
+
+        } else {
             Demo d = optionalDemo.get();
             d.setFileName(fileName);
             demoRepository.save(d);
-        } else {
-            throw new RecordNotFoundException("No demo found with this id");
         }
 
         return fileName;
@@ -259,4 +260,7 @@ public class DemoService {
         }
     }
 
+    public void setFileStorageLocation(String fileStorageLocation) {
+        this.fileStorageLocation = fileStorageLocation;
+    }
 }
