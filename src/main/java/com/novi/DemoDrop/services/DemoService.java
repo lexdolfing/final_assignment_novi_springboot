@@ -5,6 +5,7 @@ import com.novi.DemoDrop.exceptions.RecordNotFoundException;
 import com.novi.DemoDrop.models.*;
 import com.novi.DemoDrop.repositories.*;
 import com.novi.DemoDrop.Dto.InputDto.DemoInputDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.UrlResource;
@@ -34,6 +35,7 @@ public class DemoService {
     private Path fileStoragePath;
     private String fileStorageLocation;
 
+    @Autowired
     public DemoService(DemoRepository demoRepository, ReplyToDemoRepository replyToDemoRepository, ReplyToDemoService replyToDemoService, TalentManagerRepository talentManagerRepository, DJRepository djRepository, @Value("uploads") String fileStorageLocation) {
         this.demoRepository = demoRepository;
         this.replyToDemoRepository = replyToDemoRepository;
@@ -138,7 +140,9 @@ public class DemoService {
         demoOutputDto.setEmail(d.getEmail());
         demoOutputDto.setSongName(d.getSongName());
         demoOutputDto.setSongElaboration(d.getSongElaboration());
-        demoOutputDto.setDjId(d.getDj().getId());
+        if (d.getDj() != null) {
+            demoOutputDto.setDjId(d.getDj().getId());
+        }
         if (d.getReplyToDemo() != null) {
             demoOutputDto.setReplyToDemoId(d.getReplyToDemo().getId());
         }

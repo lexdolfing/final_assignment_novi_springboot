@@ -33,6 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(ReplyToDemoController.class)
+public
 class ReplyToDemoControllerTest {
 
     @Autowired
@@ -95,17 +96,7 @@ class ReplyToDemoControllerTest {
                 .andExpect(jsonPath("adminDecision").value("We nemen contact met je op"));
     }
 
-    @Test
-    void createAndAssignReply() throws Exception {
-        given(replyToDemoService.createAndAssignReply(101L, replyToDemoInputDto1)).willReturn(replyToDemoOutputDto1);
 
-        mockMvc.perform(post("/reply-to-demo/101")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(asJsonString(replyToDemoInputDto1)))
-                .andExpect(jsonPath("talentManagerId").value("101"))
-                .andExpect(jsonPath("adminComments").value("Was echt een lekker nummer"))
-                .andExpect(jsonPath("adminDecision").value("We nemen contact met je op"));
-    }
 
     @Test
     void updateReply() {

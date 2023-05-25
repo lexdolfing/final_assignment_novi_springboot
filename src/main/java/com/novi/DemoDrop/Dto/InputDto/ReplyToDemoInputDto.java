@@ -10,7 +10,7 @@ public class ReplyToDemoInputDto {
 
     private Long talentManagerId;
 
-    private Demo demo;
+    private Long demoId;
 
     public ReplyToDemoInputDto() {
     }
@@ -27,8 +27,12 @@ public class ReplyToDemoInputDto {
         return hasBeenRepliedTo;
     }
 
-    public Demo getDemo() {
-        return demo;
+    public Long getDemoId() {
+        return demoId;
+    }
+
+    public void setDemoId(Long demoId) {
+        this.demoId = demoId;
     }
 
     public Long getTalentManagerId() {
@@ -47,9 +51,6 @@ public class ReplyToDemoInputDto {
         this.hasBeenRepliedTo = hasBeenRepliedTo;
     }
 
-    public void setDemo(Demo demo) {
-        this.demo = demo;
-    }
 
     public void setTalentManagerId(Long talentManagerId) {
         this.talentManagerId = talentManagerId;

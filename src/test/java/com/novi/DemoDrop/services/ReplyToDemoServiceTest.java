@@ -213,7 +213,7 @@ class ReplyToDemoServiceTest {
         inputDto.setAdminDecision("Geupdate");
         inputDto.setHasBeenRepliedTo(true);
         inputDto.setAdminComments("Geupdate comments");
-        inputDto.setDemo(demo1);
+        inputDto.setDemoId(demo1.getId());
         ReplyToDemo replyToDemo = new ReplyToDemo();
         when(replyToDemoRepository.findById(replyToDemo1.getId())).thenReturn(Optional.of(replyToDemo));
         when(replyToDemoRepository.save(any(ReplyToDemo.class))).thenReturn(replyToDemo);

@@ -24,13 +24,6 @@ public class ReplyToDemoController {
         return ResponseEntity.ok(replyToDemoOutputDto);
     }
 
-    // Deze gaat weg, mag nooit gebruikt worden
-//    @PostMapping
-//    public ResponseEntity<Object> createReply(@RequestBody ReplyToDemoInputDto replyToDemoInputDto) {
-//        ReplyToDemoOutputDto replyToDemoOutputDto = replyToDemoService.createReply(replyToDemoInputDto);
-//        return ResponseEntity.ok(replyToDemoOutputDto);
-//    }
-
     // The method below creates a Reply and assigns it immediately to the demo with id in the url
     @PostMapping("/{id}")
     public ResponseEntity<Object> createAndAssignReply(@PathVariable Long id, @RequestBody ReplyToDemoInputDto replyToDemoInputDto) {
