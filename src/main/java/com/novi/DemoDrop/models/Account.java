@@ -18,6 +18,9 @@ public class Account {
         return lastName;
     }
 
+    public User getUser() {
+        return user;
+    }
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;

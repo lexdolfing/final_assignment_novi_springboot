@@ -120,6 +120,18 @@ public class ReplyToDemoIntegrationTest {
     }
 
     @Test
+    void createAndAssignReply() throws Exception {
+        mockMvc.perform(put("/reply-to-demo/" + replyToDemo1.getId().toString())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(replyToDemoInputDto1)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("adminDecision").value(replyToDemoInputDto1.getAdminDecision()))
+                .andExpect(jsonPath("hasBeenRepliedTo").value(replyToDemoInputDto1.isHasBeenRepliedTo()))
+                .andExpect(jsonPath("adminComments").value(replyToDemoInputDto1.getAdminComments()))
+                .andExpect(jsonPath("talentManagerId").value(replyToDemo1.getTalentManager().getId().toString()));
+    }
+
+    @Test
     void updateReply() throws Exception {
         mockMvc.perform(put("/reply-to-demo/" + replyToDemo1.getId().toString())
                 .contentType(MediaType.APPLICATION_JSON)
@@ -137,8 +149,5 @@ public class ReplyToDemoIntegrationTest {
                 .andExpect(status().isOk());
 
     }
-
-
-
 
 }

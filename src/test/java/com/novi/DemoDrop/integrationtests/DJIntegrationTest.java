@@ -1,9 +1,12 @@
 package com.novi.DemoDrop.integrationtests;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.novi.DemoDrop.Dto.InputDto.DJAccountInputDto;
 import com.novi.DemoDrop.Dto.InputDto.ReplyToDemoInputDto;
+import com.novi.DemoDrop.Dto.OutputDto.DJAccountOutputDto;
 import com.novi.DemoDrop.Dto.OutputDto.ReplyToDemoOutputDto;
 import com.novi.DemoDrop.models.*;
 import com.novi.DemoDrop.repositories.*;
@@ -62,6 +65,7 @@ public class DJIntegrationTest {
     User user2;
     Role role1;
     Role role2;
+    DJAccountInputDto djAccountInputDto1;
 
     @BeforeEach
     void setUp() {
@@ -79,7 +83,6 @@ public class DJIntegrationTest {
         user2.setPassword("wachtwoord456");
         user2.setEmail("test2@email.com");
         user2.setRole(role2);
-
 
 
         dJ1 = new DJ();
@@ -118,6 +121,14 @@ public class DJIntegrationTest {
         replyToDemo1.setAdminComments("Was echt een lekker nummer");
         replyToDemo1.setDemo(demo1); // Set demo1 after initializing replyToDemo1
 
+        djAccountInputDto1 = new DJAccountInputDto();
+        djAccountInputDto1.setEmail("test3@email.com");
+        djAccountInputDto1.setArtistName("DJ Kletskeboem");
+        djAccountInputDto1.setFirstName("Charity");
+        djAccountInputDto1.setLastName("Keizer");
+        djAccountInputDto1.setPassword("sterkwachtwoord");
+
+
         role1 = roleRepository.save(role1);
         role2 = roleRepository.save(role2);
 
@@ -151,11 +162,17 @@ public class DJIntegrationTest {
                 .andExpect(jsonPath("artistName").value(dJ1.getArtistName().toString()))
                 .andExpect(jsonPath("firstName").value(dJ1.getFirstName().toString()))
                 .andExpect(jsonPath("lastName").value(dJ1.getLastName().toString()));
-
-
-        ;
     }
 
-
+    @Test
+    void createDJ() throws Exception {
+        mockMvc.perform(post("/dj")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(asJsonString(djAccountInputDto1)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("firstName").value(djAccountInputDto1.getFirstName()))
+                .andExpect(jsonPath("lastName").value(djAccountInputDto1.getLastName()))
+                .andExpect(jsonPath("artistName").value(djAccountInputDto1.getArtistName()));
+    }
 
 }
