@@ -15,9 +15,6 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.Parameter;
 
-//TO-DO
-// 1. voeg oneToMany relatie toe met DJ
-// 2. oneToOne relatie met ReplyToDemo
 @Entity
 @Table(name= "demos")
 public class Demo {

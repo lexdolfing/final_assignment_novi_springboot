@@ -11,6 +11,7 @@ public class UserOutputDto {
     Long id;
     private String password;
     private String email;
+    private String jwtToken;
 
 
     private String roleName;
