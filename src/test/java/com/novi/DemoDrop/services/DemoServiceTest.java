@@ -61,7 +61,7 @@ class DemoServiceTest {
     @BeforeEach
     void setUp() {
 
-        demoService = new DemoService(demoRepository, replyToDemoRepository, replyToDemoService, talentManagerRepository, djRepository);
+        demoService = new DemoService(demoRepository, replyToDemoRepository, talentManagerRepository, djRepository);
         dJ1 = new DJ();
         dJ1.setId(101L);
         dJ1.setListOfDemos(new ArrayList<>());

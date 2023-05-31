@@ -28,18 +28,15 @@ public class DemoService {
     private  DemoRepository demoRepository;
     private  ReplyToDemoRepository replyToDemoRepository;
 
-    // gebruik ik deze niet?
-    private  ReplyToDemoService replyToDemoService;
     private  TalentManagerRepository talentManagerRepository;
     private  DJRepository djRepository;
     private Path fileStoragePath;
     private String fileStorageLocation;
 
     @Autowired
-    public DemoService(DemoRepository demoRepository, ReplyToDemoRepository replyToDemoRepository, ReplyToDemoService replyToDemoService, TalentManagerRepository talentManagerRepository, DJRepository djRepository, @Value("uploads") String fileStorageLocation) {
+    public DemoService(DemoRepository demoRepository, ReplyToDemoRepository replyToDemoRepository, TalentManagerRepository talentManagerRepository, DJRepository djRepository, @Value("uploads") String fileStorageLocation) {
         this.demoRepository = demoRepository;
         this.replyToDemoRepository = replyToDemoRepository;
-        this.replyToDemoService = replyToDemoService;
         this.talentManagerRepository = talentManagerRepository;
         this.djRepository = djRepository;
         this.fileStoragePath = Paths.get(fileStorageLocation).toAbsolutePath().normalize();
@@ -51,10 +48,9 @@ public class DemoService {
         }
     }
 
-    public DemoService(DemoRepository demoRepository, ReplyToDemoRepository replyToDemoRepository, ReplyToDemoService replyToDemoService, TalentManagerRepository talentManagerRepository, DJRepository djRepository) {
+    public DemoService(DemoRepository demoRepository, ReplyToDemoRepository replyToDemoRepository, TalentManagerRepository talentManagerRepository, DJRepository djRepository) {
         this.demoRepository = demoRepository;
         this.replyToDemoRepository = replyToDemoRepository;
-        this.replyToDemoService = replyToDemoService;
         this.talentManagerRepository = talentManagerRepository;
         this.djRepository = djRepository;
         this.fileStoragePath = Paths.get("uploads").toAbsolutePath().normalize();
@@ -81,6 +77,23 @@ public class DemoService {
         return allDemosDto;
     }
 
+    public List<DemoOutputDto> getAllMyDemos(Long djId) {
+        Optional<DJ> optionalDj = djRepository.findById(djId);
+        List<DemoOutputDto> allMyDemosDto = new ArrayList<>();
+        if(optionalDj.isPresent()) {
+            DJ dj = optionalDj.get();
+            List<Demo> myDemos = dj.getListOfDemos();
+            for (Demo d : myDemos) {
+                DemoOutputDto demoOutputDto;
+                demoOutputDto = makeTheDto(d);
+                allMyDemosDto.add(demoOutputDto);
+            }
+          return allMyDemosDto;
+        } else {
+            throw new RecordNotFoundException("No DJ found with this ID");
+        }
+    }
+
     public DemoOutputDto getDemoById(Long id) {
         Optional<Demo> demoOptional = demoRepository.findById(id);
 
@@ -90,7 +103,6 @@ public class DemoService {
         Demo d = demoOptional.get();
         return makeTheDto(d);
     }
-
     public DemoOutputDto createDemo(DemoInputDto demoInputDto) {
             Demo d = new Demo();
             d = setOrUpdateDemoObject(demoInputDto, d);
@@ -215,7 +227,7 @@ public class DemoService {
         // path for mac and Linux version:
         Path filePath = Paths.get(fileStoragePath + "/" + fileName);
 
-        // path for windows version:
+        // path for Windows version:
 //        Path filePath = Paths.get(fileStoragePath + "\\" + fileName);
 
         try {
@@ -267,4 +279,6 @@ public class DemoService {
     public void setFileStorageLocation(String fileStorageLocation) {
         this.fileStorageLocation = fileStorageLocation;
     }
+
+
 }

@@ -29,6 +29,7 @@ public class UserController {
         return ResponseEntity.ok().body(userOutputDtos);
     }
 
+    //TO-DO: add security that a user can only see his own info
     @GetMapping(value = "/{username}")
     public ResponseEntity<UserOutputDto> getUser(@PathVariable("username") String email) {
 
@@ -53,6 +54,7 @@ public class UserController {
         return ResponseEntity.created(location).build();
     }
 
+    //TO-DO: add security that a user can only see his own info
     @PutMapping(value = "/{email}")
     public ResponseEntity<UserOutputDto> updateDJ(@PathVariable("email") String username, @RequestBody UserInputDto dto) {
 
@@ -60,7 +62,7 @@ public class UserController {
 
         return ResponseEntity.noContent().build();
     }
-
+    //TO-DO: add security that a user can only see his own info
     @DeleteMapping(value = "/{username}")
     public ResponseEntity<Object> deleteDJ(@PathVariable("username") String username) {
         userService.deleteUser(username);

@@ -3,14 +3,17 @@ package com.novi.DemoDrop.controllers;
 import com.novi.DemoDrop.Dto.InputDto.DemoInputDto;
 import com.novi.DemoDrop.Dto.InputDto.IdInputDto;
 import com.novi.DemoDrop.Dto.OutputDto.DemoOutputDto;
+import com.novi.DemoDrop.exceptions.BadRequestException;
 import com.novi.DemoDrop.exceptions.RecordNotFoundException;
 import com.novi.DemoDrop.Dto.OutputDto.FileUploadResponse;
+import com.novi.DemoDrop.models.Demo;
 import com.novi.DemoDrop.services.DemoService;
 import org.springframework.core.io.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -43,6 +46,19 @@ public class DemoController {
         return ResponseEntity.ok(demoOutputDto);
     }
 
+    //TO-DO: add method for DJ to get all the demo's from their list.
+    @GetMapping("/mydemos/{djId}")
+    public ResponseEntity<List<DemoOutputDto>> getAllMyDemos(@PathVariable Long djId, Authentication authentication) {
+        Long loggedInDjId = Long.parseLong(authentication.getName());
+        if(loggedInDjId.equals(djId)) {
+            List<DemoOutputDto> demoOutputDtos = demoService.getAllMyDemos(djId);
+            return ResponseEntity.ok(demoOutputDtos);
+        } else {
+            throw new BadRequestException("Youre not allowed to see these demos");
+        }
+    }
+
+    //TO-DO: beveiliging toevoegen voor users dat ze alleen eigen demo kunnen downloaden. maar alle admins wel.
     @GetMapping("/{demoId}/download")
     public ResponseEntity<Resource> downloadMp3File(@PathVariable Long demoId, HttpServletRequest request) {
         Resource resource = demoService.downloadFile(demoId);
@@ -74,7 +90,7 @@ public class DemoController {
 
     }
 
-
+    // TO-DO: beveiliging toevoegen voor user en alle admins.
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> removeDemo (@PathVariable Long id) {
         boolean isDeleted = demoService.deleteDemo(id);

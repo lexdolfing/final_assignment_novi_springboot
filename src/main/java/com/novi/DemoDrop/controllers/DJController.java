@@ -24,6 +24,7 @@ public class DJController {
         return ResponseEntity.ok(djAccountOutputDtos);
     }
 
+    // TO-DO: hier ook beveiliging toevoegen dat alleen een user met dat ID erbij kan
     @GetMapping("/{id}")
     public ResponseEntity<DJAccountOutputDto> getDJById(@PathVariable Long id) {
         DJAccountOutputDto djAccountOutputDto = djService.getDJById(id);
@@ -37,7 +38,7 @@ public class DJController {
     }
 
 
-    // Toevoegen afhankelijk van functies in front-end:
+    // TO-DO: Toevoegen afhankelijk van functies in front-end:
     // 1. put voor updaten informatie
     // 2. Delete voor verwijderen account.
 
