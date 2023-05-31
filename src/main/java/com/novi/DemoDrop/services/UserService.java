@@ -2,6 +2,7 @@ package com.novi.DemoDrop.services;
 
 import com.novi.DemoDrop.Dto.InputDto.UserInputDto;
 import com.novi.DemoDrop.Dto.OutputDto.UserOutputDto;
+import com.novi.DemoDrop.exceptions.BadRequestException;
 import com.novi.DemoDrop.exceptions.RecordNotFoundException;
 import com.novi.DemoDrop.exceptions.UsernameNotFoundException;
 import com.novi.DemoDrop.models.Role;
@@ -9,16 +10,25 @@ import com.novi.DemoDrop.models.User;
 import com.novi.DemoDrop.repositories.RoleRepository;
 import com.novi.DemoDrop.repositories.UserRepository;
 import com.novi.DemoDrop.utils.RandomStringGenerator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
 public class UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+
+    @Autowired
+    @Lazy
+    private PasswordEncoder passwordEncoder;
 
     public UserService(UserRepository userRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
@@ -56,14 +66,15 @@ public class UserService {
         userOutputDto.setId(u.getId());
         userOutputDto.setEmail(u.getEmail());
         userOutputDto.setPassword(u.getPassword());
+        userOutputDto.setRoleName(u.getRole().getRoleName());
         return userOutputDto;
     }
 
     public User makeUser (UserInputDto userInputDto) {
         User user = new User();
         user.setEmail(userInputDto.getEmail());
-        user.setRole(roleRepository.findByRoleName(userInputDto.getRoleName()));
-        user.setPassword(userInputDto.getPassword());
+//        user.setRole(roleRepository.findByRoleName("ROLE_USER"));
+        user.setPassword(passwordEncoder.encode(userInputDto.getPassword()));
         // TO-DO: moet nog toegevoegd worden: API-key en enabled?
         return user;
 
@@ -89,6 +100,9 @@ public class UserService {
     }
 
     public String createUser(UserInputDto userDto) {
+        if(userRepository.findByEmail(userDto.getEmail()) != null){
+            throw new BadRequestException("user with this email already exists");
+        }
         String randomString = RandomStringGenerator.generateAlphaNumeric(20);
         userDto.setApikey(randomString);
         User newUser = userRepository.save(makeUser(userDto));
@@ -99,8 +113,23 @@ public class UserService {
 
         if (userRepository.findByEmail(email) == null) throw new org.springframework.security.core.userdetails.UsernameNotFoundException(email);
         User user = userRepository.findByEmail(email);
-        Role role = roleRepository.findByRoleName(roleName);
+        Role role = new Role();
+        if (Objects.equals(roleName, "ROLE_USER")) {
+            role.setRoleName("ROLE_USER");
+        } else if (Objects.equals(roleName, "ROLE_ADMIN")) {
+            role.setRoleName("ROLE_ADMIN");
+        }
+        role.setUser(user);
+        roleRepository.save(role);
         user.setRole(role);
         userRepository.save(user);
     }
+
+//    public void addAuthority(String username, String authority) {
+//
+//        if (!userRepository.existsById(username)) throw new org.springframework.security.core.userdetails.UsernameNotFoundException(username);
+//        User user = userRepository.findById(username).get();
+//        user.addAuthority(new Authority(username, authority));
+//        userRepository.save(user);
+//    }
 }

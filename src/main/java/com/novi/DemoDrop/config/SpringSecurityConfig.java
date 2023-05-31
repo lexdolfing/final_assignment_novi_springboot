@@ -48,9 +48,6 @@ public class SpringSecurityConfig {
                 .and()
                 .build();
     }
-
-
-
     // Authorizatie met jwt
     @Bean
     protected SecurityFilterChain filter (HttpSecurity http) throws Exception {
@@ -69,18 +66,8 @@ public class SpringSecurityConfig {
                 .requestMatchers(HttpMethod.GET,"/users").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.POST,"/users/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/users/**").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.POST, "/cimodules").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.DELETE, "/cimodules/**").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.POST, "/remotecontrollers").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.DELETE, "/remotecontrollers/**").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.POST, "/televisions").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.DELETE, "/televisions/**").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.POST, "/wallbrackets").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.DELETE, "/wallbrackets/**").hasRole("ADMIN")
                 // Je mag meerdere paths tegelijk definieren
-                .requestMatchers("/cimodules", "/remotecontrollers", "/televisions", "/wallbrackets").hasAnyRole("ADMIN", "USER")
                 .requestMatchers("/authenticated").authenticated()
-//                .requestMatchers("/authenticate").permitAll()
                 .anyRequest().denyAll()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

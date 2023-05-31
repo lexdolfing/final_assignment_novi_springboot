@@ -1,9 +1,11 @@
 package com.novi.DemoDrop.services;
 
 import com.novi.DemoDrop.Dto.InputDto.TalentManagerInputDto;
+import com.novi.DemoDrop.Dto.InputDto.UserInputDto;
 import com.novi.DemoDrop.Dto.OutputDto.TalentManagerOutputDto;
+import com.novi.DemoDrop.controllers.UserController;
+import com.novi.DemoDrop.exceptions.BadRequestException;
 import com.novi.DemoDrop.exceptions.RecordNotFoundException;
-import com.novi.DemoDrop.models.Role;
 import com.novi.DemoDrop.models.TalentManager;
 import com.novi.DemoDrop.models.User;
 import com.novi.DemoDrop.repositories.RoleRepository;
@@ -21,10 +23,12 @@ public class TalentManagerService {
     private final TalentManagerRepository talentManagerRepository;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-    public TalentManagerService(TalentManagerRepository talentManagerRepository, UserRepository userRepository, RoleRepository roleRepository) {
+    private final UserController userController;
+    public TalentManagerService(TalentManagerRepository talentManagerRepository, UserRepository userRepository, RoleRepository roleRepository, UserController userController) {
         this.talentManagerRepository = talentManagerRepository;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.userController = userController;
     }
 
     public List<TalentManagerOutputDto> getAllManagers(){
@@ -50,16 +54,18 @@ public class TalentManagerService {
     }
 
     public TalentManagerOutputDto createManager(TalentManagerInputDto talentManagerInputDto) {
+        if (!talentManagerInputDto.getEmail().contains("@elevaterecords")) {
+            throw new BadRequestException("Not allowed to create admin account with this e-mail address");
+        }
         TalentManager t = new TalentManager();
-        User u = new User();
-        Role r = new Role();
-        r.setRoleName("ROLE_ADMIN");
         t = setOrUpdateTalentManagerObject(talentManagerInputDto, t);
-        u = setOrUpdateUserObject(talentManagerInputDto, u, r);
+        UserInputDto userInputDto = new UserInputDto();
+        userInputDto.setEmail(talentManagerInputDto.getEmail());
+        userInputDto.setPassword(talentManagerInputDto.getPassword());
+        userController.createUser(userInputDto);
+        User u = userRepository.findByEmail(userInputDto.getEmail());
         t.setUser(u);
         try {
-            roleRepository.save(r);
-            userRepository.save(u);
             talentManagerRepository.save(t);
             return makeTheDto(t);
         } catch (DataIntegrityViolationException e) {
@@ -84,13 +90,6 @@ public class TalentManagerService {
         t.setFirstName(talentManagerInputDto.getFirstName());
         t.setLastName(talentManagerInputDto.getLastName());
         return t;
-    }
-
-    public User setOrUpdateUserObject (TalentManagerInputDto talentManagerInputDto, User u, Role r) {
-        u.setEmail(talentManagerInputDto.getEmail());
-        u.setPassword(talentManagerInputDto.getPassword());
-        u.setRole(r);
-        return u;
     }
 
 }

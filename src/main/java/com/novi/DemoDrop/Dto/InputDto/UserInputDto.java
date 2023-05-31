@@ -9,7 +9,6 @@ import jakarta.persistence.OneToOne;
 public class UserInputDto {
     private String password;
     private String email;
-    private String roleName;
     public String apikey;
 
     public UserInputDto() {
@@ -24,9 +23,6 @@ public class UserInputDto {
         return email;
     }
 
-    public String getRoleName() {
-        return roleName;
-    }
 
 
     public void setPassword(String password) {
@@ -37,9 +33,6 @@ public class UserInputDto {
         this.email = email;
     }
 
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
-    }
 
     public String getApikey() {
         return apikey;

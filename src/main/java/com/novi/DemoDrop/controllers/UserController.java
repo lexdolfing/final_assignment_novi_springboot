@@ -9,7 +9,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Map;
 
 @CrossOrigin
 @RestController
@@ -38,18 +37,21 @@ public class UserController {
         return ResponseEntity.ok().body(userOutputDto);
 
     }
-//
-//    @PostMapping(value = "")
-//    public ResponseEntity<UserInputDto> createDJ(@RequestBody UserInputDto dto) {;
-//
-//        String newUsername = userService.createUser(dto);
-//        userService.addAuthority(newUsername, "ROLE_USER");
-//
-//        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{username}")
-//                .buildAndExpand(newUsername).toUri();
-//
-//        return ResponseEntity.created(location).build();
-//    }
+
+    @PostMapping(value = "")
+    public ResponseEntity<UserInputDto> createUser(@RequestBody UserInputDto dto) {
+
+        String newUsername = userService.createUser(dto);
+        if (dto.getEmail().contains("@elevaterecords.nl")){
+            userService.addRole(newUsername, "ROLE_ADMIN");
+        } else {
+            userService.addRole(newUsername, "ROLE_USER");
+        }
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{username}")
+                .buildAndExpand(newUsername).toUri();
+
+        return ResponseEntity.created(location).build();
+    }
 
     @PutMapping(value = "/{email}")
     public ResponseEntity<UserOutputDto> updateDJ(@PathVariable("email") String username, @RequestBody UserInputDto dto) {
@@ -60,7 +62,7 @@ public class UserController {
     }
 
     @DeleteMapping(value = "/{username}")
-    public ResponseEntity<Object> deleteKlant(@PathVariable("username") String username) {
+    public ResponseEntity<Object> deleteDJ(@PathVariable("username") String username) {
         userService.deleteUser(username);
         return ResponseEntity.noContent().build();
     }

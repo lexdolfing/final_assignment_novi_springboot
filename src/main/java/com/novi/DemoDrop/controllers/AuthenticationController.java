@@ -30,10 +30,6 @@ public class AuthenticationController {
         this.userDetailsService = userDetailsService;
         this.jwtUtl = jwtUtl;
     }
-
-
-
-
     /*
         Deze methode geeft de principal (basis user gegevens) terug van de ingelogde gebruiker
     */
@@ -47,7 +43,7 @@ public class AuthenticationController {
      */
     @PostMapping(value = "/authenticate")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
-
+        System.out.println("test authenticate");
         String username = authenticationRequest.getUsername();
         String password = authenticationRequest.getPassword();
 
