@@ -51,6 +51,7 @@ public class AuthenticationController {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(username, password)
             );
+            System.out.println("test authentice try-block");
         }
         catch (BadCredentialsException ex) {
             throw new Exception("Incorrect username or password", ex);

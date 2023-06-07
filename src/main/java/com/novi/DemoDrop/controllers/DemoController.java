@@ -7,6 +7,7 @@ import com.novi.DemoDrop.exceptions.BadRequestException;
 import com.novi.DemoDrop.exceptions.RecordNotFoundException;
 import com.novi.DemoDrop.Dto.OutputDto.FileUploadResponse;
 import com.novi.DemoDrop.models.Demo;
+import com.novi.DemoDrop.repositories.DemoRepository;
 import com.novi.DemoDrop.services.DemoService;
 import org.springframework.core.io.Resource;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,13 +15,17 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @CrossOrigin
 @RequestMapping("demos")
@@ -28,9 +33,11 @@ import java.util.Objects;
 public class DemoController {
 
     private final DemoService demoService;
+    private final DemoRepository demoRepository;
 
-    public DemoController(DemoService demoService) {
+    public DemoController(DemoService demoService, DemoRepository demoRepository) {
         this.demoService = demoService;
+        this.demoRepository = demoRepository;
     }
 
     @GetMapping
@@ -46,25 +53,19 @@ public class DemoController {
         return ResponseEntity.ok(demoOutputDto);
     }
 
-    //TO-DO: add method for DJ to get all the demo's from their list.
     @GetMapping("/mydemos/{djId}")
-    public ResponseEntity<List<DemoOutputDto>> getAllMyDemos(@PathVariable Long djId, Authentication authentication) {
-        Long loggedInDjId = Long.parseLong(authentication.getName());
-        if(loggedInDjId.equals(djId)) {
-            List<DemoOutputDto> demoOutputDtos = demoService.getAllMyDemos(djId);
-            return ResponseEntity.ok(demoOutputDtos);
-        } else {
-            throw new BadRequestException("Youre not allowed to see these demos");
-        }
+    public ResponseEntity<List<DemoOutputDto>> getAllMyDemos(@PathVariable Long djId) {
+        List<DemoOutputDto> demoOutputDtos = demoService.getAllMyDemos(djId);
+        return ResponseEntity.ok(demoOutputDtos);
+
     }
 
-    //TO-DO: beveiliging toevoegen voor users dat ze alleen eigen demo kunnen downloaden. maar alle admins wel.
     @GetMapping("/{demoId}/download")
     public ResponseEntity<Resource> downloadMp3File(@PathVariable Long demoId, HttpServletRequest request) {
         Resource resource = demoService.downloadFile(demoId);
         String mimeType;
 
-        try{
+        try {
             mimeType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
         } catch (IOException e) {
             mimeType = MediaType.APPLICATION_OCTET_STREAM_VALUE;
@@ -80,33 +81,44 @@ public class DemoController {
 
     @PostMapping("/mp3file")
     public FileUploadResponse mp3FileUpload(@RequestParam("file") MultipartFile file, @RequestParam Long demoId) {
-        String uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/download").path(Objects.requireNonNull(file.getOriginalFilename())).toUriString();
+        Optional<Demo> demoOptional = demoRepository.findById(demoId);
+        if (demoOptional.isPresent()) {
+            Demo d = demoOptional.get();
+            String uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/download").path(Objects.requireNonNull(file.getOriginalFilename())).toUriString();
 
-        String contentType = file.getContentType();
+            String contentType = file.getContentType();
 
-        String fileName = demoService.storeMP3File(file, demoId);
+            String fileName = demoService.storeMP3File(file, demoId);
 
-        return new FileUploadResponse(fileName, contentType, uri);
+            return new FileUploadResponse(fileName, contentType, uri);
+
+        } else {
+            throw new RecordNotFoundException("No demo found to add MP3 to");
+        }
 
     }
 
-    // TO-DO: beveiliging toevoegen voor user en alle admins.
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> removeDemo (@PathVariable Long id) {
-        boolean isDeleted = demoService.deleteDemo(id);
+    public ResponseEntity<Object> removeDemo(@PathVariable Long id, Authentication authentication) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String loggedInUsername = userDetails.getUsername();
+        Optional<Demo> demoOptional = demoRepository.findById(id);
+        boolean isDeleted = false;
+        if (demoOptional.isPresent()) {
+            Demo d = demoOptional.get();
+
+            // check if user role is admin or if role is user and if the user is the owner of the demo
+            isDeleted = false;
+            if (loggedInUsername.contains("@elevaterecords.nl") || d.getDj().getUser().getEmail().equals(loggedInUsername)) {
+                isDeleted = demoService.deleteDemo(id);
+            }
+        }
         if (isDeleted) {
             return ResponseEntity.ok().body("Element is deleted");
         } else {
             throw new RecordNotFoundException("No record found with this id");
         }
 
-    }
-    // TO-DO: voeg nog @Valid toe voor @RequestBody als validation dependency geinjecteerd is
-    // this method assigns an existing reply to a demo
-    // MAAR: deze methode mag weg want ga ik niet gebruiken? Reply wordt altijd direct aan demo gekoppeld.
-    @PutMapping("/{id}/reply-to-demo")
-    public void assignReplyToDemo(@PathVariable("id") Long id, @RequestBody IdInputDto input) {
-        demoService.assignReplyToDemo(id, input.id);
     }
 
 

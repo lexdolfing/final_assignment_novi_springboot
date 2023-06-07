@@ -2,10 +2,12 @@ package com.novi.DemoDrop.services;
 
 import com.novi.DemoDrop.Dto.InputDto.TalentManagerInputDto;
 import com.novi.DemoDrop.Dto.InputDto.UserInputDto;
+import com.novi.DemoDrop.Dto.OutputDto.DJAccountOutputDto;
 import com.novi.DemoDrop.Dto.OutputDto.TalentManagerOutputDto;
 import com.novi.DemoDrop.controllers.UserController;
 import com.novi.DemoDrop.exceptions.BadRequestException;
 import com.novi.DemoDrop.exceptions.RecordNotFoundException;
+import com.novi.DemoDrop.models.DJ;
 import com.novi.DemoDrop.models.TalentManager;
 import com.novi.DemoDrop.models.User;
 import com.novi.DemoDrop.repositories.RoleRepository;
@@ -92,4 +94,12 @@ public class TalentManagerService {
         return t;
     }
 
+    public TalentManagerOutputDto getTalentManagerByUserId(Long userId) {
+        Optional<TalentManager> optionalTalentManager = Optional.ofNullable(talentManagerRepository.findByUserId(userId));
+        if(optionalTalentManager.isEmpty()) {
+            throw new RecordNotFoundException("No TalentManager found with this id");
+        }
+        TalentManager t = optionalTalentManager.get();
+        return makeTheDto(t);
+    }
 }

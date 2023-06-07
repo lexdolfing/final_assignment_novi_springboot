@@ -12,7 +12,6 @@ import com.novi.DemoDrop.repositories.UserRepository;
 import com.novi.DemoDrop.utils.RandomStringGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -65,8 +64,8 @@ public class UserService {
         UserOutputDto userOutputDto = new UserOutputDto();
         userOutputDto.setId(u.getId());
         userOutputDto.setEmail(u.getEmail());
-        userOutputDto.setPassword(u.getPassword());
         userOutputDto.setRoleName(u.getRole().getRoleName());
+        userOutputDto.setPassword(u.getPassword());
         return userOutputDto;
     }
 

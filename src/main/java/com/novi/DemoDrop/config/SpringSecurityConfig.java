@@ -57,8 +57,7 @@ public class SpringSecurityConfig {
                 .httpBasic().disable()
                 .cors().and()
                 .authorizeHttpRequests()
-                .requestMatchers(HttpMethod.POST, "/authenticate").permitAll()
-                // Wanneer je deze uncomments, staat je hele security open. Je hebt dan alleen nog een jwt nodig.
+                // Wanneer je deze uncomment, staat je hele security open. Je hebt dan alleen nog een jwt nodig.
 //                .requestMatchers("/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/authenticate").permitAll()
                 .requestMatchers("/authenticated").authenticated()
@@ -71,9 +70,9 @@ public class SpringSecurityConfig {
                 .requestMatchers(HttpMethod.DELETE, "demos/{id}").hasAnyRole("ADMIN", "USER")
                 .requestMatchers(HttpMethod.PUT, "/demos/{id}/reply-to-demo").hasAnyRole("ADMIN", "USER")
                 .requestMatchers(HttpMethod.GET, "/dj").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.GET, "/dj/{id}").hasAnyRole()
+                .requestMatchers(HttpMethod.GET, "/dj/{id}").hasAnyRole("ADMIN", "USER")
                 .requestMatchers(HttpMethod.POST, "/dj").permitAll()
-                .requestMatchers(HttpMethod.GET, "/reply-to-demo/{id}").hasAnyRole()
+                .requestMatchers(HttpMethod.GET, "/reply-to-demo/{id}").hasAnyRole("ADMIN", "USER")
                 .requestMatchers(HttpMethod.POST, "/reply-to-demo/{id}").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/reply-to-demo/{id}").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/reply-to-demo/{id}").hasRole("ADMIN")
@@ -81,7 +80,7 @@ public class SpringSecurityConfig {
                 .requestMatchers(HttpMethod.POST,"/talentmanager").permitAll() //permission to make admin account is made in the service layer on basis of email
                 .requestMatchers(HttpMethod.POST, "/users").permitAll()
                 .requestMatchers(HttpMethod.GET,"/users").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.GET,"/users/{username}").hasRole("USER")
+                .requestMatchers(HttpMethod.GET,"/users/{username}").permitAll()
                 .requestMatchers(HttpMethod.POST,"/users/**").permitAll()
                 .requestMatchers(HttpMethod.PUT, "/users/{email}").hasRole("USER")
                 .requestMatchers(HttpMethod.DELETE, "/users/{username}").hasAnyRole("ADMIN", "USER")

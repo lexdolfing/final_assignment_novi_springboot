@@ -17,7 +17,6 @@ public class ReplyToDemoController {
         this.replyToDemoService = replyToDemoService;
     }
 
-    // TO-DO hier ook beveiliging toevoegen dat alleen DJ met dit id erbij kan
     @GetMapping("/{id}")
     public ResponseEntity<ReplyToDemoOutputDto> getReplyById(@PathVariable Long id){
         ReplyToDemoOutputDto replyToDemoOutputDto = new ReplyToDemoOutputDto();

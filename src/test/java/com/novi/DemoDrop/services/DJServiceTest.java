@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
@@ -68,7 +67,7 @@ class DJServiceTest {
         given(djRepository.findById(id)).willReturn(optionalDJ);
 
         // Act
-        DJAccountOutputDto result = djService.getDJById(id);
+        DJAccountOutputDto result = djService.getDJByUserId(id);
 
         // Assert
         assertNotNull(result);
@@ -82,7 +81,7 @@ class DJServiceTest {
         given(djRepository.findById(id)).willReturn(Optional.empty());
 
         // Act & Assert
-        assertThrows(RecordNotFoundException.class, () -> djService.getDJById(id));
+        assertThrows(RecordNotFoundException.class, () -> djService.getDJByUserId(id));
     }
 
     @Test

@@ -2,8 +2,12 @@ package com.novi.DemoDrop.controllers;
 
 import com.novi.DemoDrop.Dto.InputDto.UserInputDto;
 import com.novi.DemoDrop.Dto.OutputDto.UserOutputDto;
+import com.novi.DemoDrop.services.CustomUserDetailsService;
 import com.novi.DemoDrop.services.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -16,9 +20,11 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final CustomUserDetailsService customUserDetailsService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, CustomUserDetailsService customUserDetailsService) {
         this.userService = userService;
+        this.customUserDetailsService = customUserDetailsService;
     }
 
     @GetMapping(value = "")
@@ -29,14 +35,16 @@ public class UserController {
         return ResponseEntity.ok().body(userOutputDtos);
     }
 
-    //TO-DO: add security that a user can only see his own info
     @GetMapping(value = "/{username}")
-    public ResponseEntity<UserOutputDto> getUser(@PathVariable("username") String email) {
-
-        UserOutputDto userOutputDto = userService.getUserByEmail(email);
-
-        return ResponseEntity.ok().body(userOutputDto);
-
+    public ResponseEntity<UserOutputDto> getUser(@PathVariable("username") String email, Authentication authentication) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String loggedInUsername = userDetails.getUsername();
+        if (loggedInUsername.equals(email)) {
+            UserOutputDto userOutputDto = userService.getUserByEmail(email);
+            return ResponseEntity.ok().body(userOutputDto);
+        } else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null); // Return a forbidden response if the usernames don't match
+        }
     }
 
     @PostMapping(value = "")
@@ -54,7 +62,6 @@ public class UserController {
         return ResponseEntity.created(location).build();
     }
 
-    //TO-DO: add security that a user can only see his own info
     @PutMapping(value = "/{email}")
     public ResponseEntity<UserOutputDto> updateDJ(@PathVariable("email") String username, @RequestBody UserInputDto dto) {
 
@@ -62,7 +69,6 @@ public class UserController {
 
         return ResponseEntity.noContent().build();
     }
-    //TO-DO: add security that a user can only see his own info
     @DeleteMapping(value = "/{username}")
     public ResponseEntity<Object> deleteDJ(@PathVariable("username") String username) {
         userService.deleteUser(username);
@@ -73,26 +79,5 @@ public class UserController {
     public ResponseEntity<Object> getUserAuthorities(@PathVariable("email") String email) {
         return ResponseEntity.ok().body(userService.getAuthorities(email));
     }
-
-// TO-DO Ga ik onderstaande niet gebruiken?
-//    @PostMapping(value = "/{username}/authorities")
-//    public ResponseEntity<Object> addUserAuthority(@PathVariable("username") String username, @RequestBody Map<String, Object> fields) {
-//        try {
-//            String authorityName = (String) fields.get("authority");
-//            userService.addAuthority(username, authorityName);
-//            return ResponseEntity.noContent().build();
-//        }
-//        catch (Exception ex) {
-//            throw new BadRequestException();
-//        }
-//
-//   }
-
-    // Ga ik ook niet gebruiken?
-//    @DeleteMapping(value = "/{username}/authorities/{authority}")
-//    public ResponseEntity<Object> deleteUserAuthority(@PathVariable("username") String username, @PathVariable("authority") String authority) {
-//        userService.removeAuthority(username, authority);
-//        return ResponseEntity.noContent().build();
-//    }
 
 }
