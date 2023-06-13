@@ -99,19 +99,13 @@ public class DemoController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> removeDemo(@PathVariable Long id, Authentication authentication) {
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        String loggedInUsername = userDetails.getUsername();
+    public ResponseEntity<Object> removeDemo(@PathVariable Long id) {
+
         Optional<Demo> demoOptional = demoRepository.findById(id);
         boolean isDeleted = false;
         if (demoOptional.isPresent()) {
             Demo d = demoOptional.get();
-
-            // check if user role is admin or if role is user and if the user is the owner of the demo
-            isDeleted = false;
-            if (loggedInUsername.contains("@elevaterecords.nl") || d.getDj().getUser().getEmail().equals(loggedInUsername)) {
                 isDeleted = demoService.deleteDemo(id);
-            }
         }
         if (isDeleted) {
             return ResponseEntity.ok().body("Element is deleted");
@@ -120,9 +114,4 @@ public class DemoController {
         }
 
     }
-
-
-    // Nog toe te voegen requests:
-    // update demo request (maar echt?)
-    // get demo info (id, artistname and songname and email - voor de reactie) Maar misschien moet deze in de ReplyToDemoKlasse?
 }

@@ -62,7 +62,7 @@ public class SpringSecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/authenticate").permitAll()
                 .requestMatchers("/authenticated").authenticated()
                 .requestMatchers(HttpMethod.GET,"/demos").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.GET, "/demos/{id}").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/demos/{id}").hasAnyRole("ADMIN", "USER")
                 .requestMatchers(HttpMethod.GET,"/demos/mydemos/{djId}").hasRole("USER")
                 .requestMatchers(HttpMethod.GET,"/demos/{demoId}/download").hasAnyRole("ADMIN", "USER")
                 .requestMatchers(HttpMethod.POST, "demos").hasRole("USER")
@@ -80,9 +80,7 @@ public class SpringSecurityConfig {
                 .requestMatchers(HttpMethod.POST,"/talentmanager").permitAll() //permission to make admin account is made in the service layer on basis of email
                 .requestMatchers(HttpMethod.POST, "/users").permitAll()
                 .requestMatchers(HttpMethod.GET,"/users").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.GET,"/users/{username}").permitAll()
-                .requestMatchers(HttpMethod.POST,"/users/**").permitAll()
-                .requestMatchers(HttpMethod.PUT, "/users/{email}").hasRole("USER")
+                .requestMatchers(HttpMethod.GET,"/users/{username}").hasAnyRole("ADMIN", "USER")
                 .requestMatchers(HttpMethod.DELETE, "/users/{username}").hasAnyRole("ADMIN", "USER")
                 // Je mag meerdere paths tegelijk definieren
                 .anyRequest().denyAll()

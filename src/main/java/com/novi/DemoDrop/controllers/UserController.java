@@ -47,6 +47,11 @@ public class UserController {
         }
     }
 
+    @GetMapping(value = "/{email}/authorities")
+    public ResponseEntity<Object> getUserAuthorities(@PathVariable("email") String email) {
+        return ResponseEntity.ok().body(userService.getAuthorities(email));
+    }
+
     @PostMapping(value = "")
     public ResponseEntity<UserInputDto> createUser(@RequestBody UserInputDto dto) {
 
@@ -62,22 +67,12 @@ public class UserController {
         return ResponseEntity.created(location).build();
     }
 
-    @PutMapping(value = "/{email}")
-    public ResponseEntity<UserOutputDto> updateDJ(@PathVariable("email") String username, @RequestBody UserInputDto dto) {
-
-        userService.updateUser(username, dto);
-
-        return ResponseEntity.noContent().build();
-    }
     @DeleteMapping(value = "/{username}")
     public ResponseEntity<Object> deleteDJ(@PathVariable("username") String username) {
         userService.deleteUser(username);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping(value = "/{email}/authorities")
-    public ResponseEntity<Object> getUserAuthorities(@PathVariable("email") String email) {
-        return ResponseEntity.ok().body(userService.getAuthorities(email));
-    }
+
 
 }
