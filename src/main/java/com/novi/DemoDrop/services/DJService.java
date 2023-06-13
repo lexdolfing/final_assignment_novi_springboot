@@ -1,10 +1,11 @@
 package com.novi.DemoDrop.services;
 
 import com.novi.DemoDrop.Dto.InputDto.DJAccountInputDto;
+import com.novi.DemoDrop.Dto.InputDto.UserInputDto;
 import com.novi.DemoDrop.Dto.OutputDto.DJAccountOutputDto;
+import com.novi.DemoDrop.controllers.UserController;
 import com.novi.DemoDrop.exceptions.RecordNotFoundException;
 import com.novi.DemoDrop.models.DJ;
-import com.novi.DemoDrop.models.Role;
 import com.novi.DemoDrop.models.User;
 import com.novi.DemoDrop.repositories.DJRepository;
 import com.novi.DemoDrop.repositories.RoleRepository;
@@ -22,11 +23,15 @@ public class DJService {
     private final DJRepository djRepository;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final UserService userService;
+    private final UserController userController;
 
-    public DJService(DJRepository djRepository, UserRepository userRepository, RoleRepository roleRepository) {
+    public DJService(DJRepository djRepository, UserRepository userRepository, RoleRepository roleRepository, UserService userService, UserController userController) {
         this.djRepository = djRepository;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.userService = userService;
+        this.userController = userController;
     }
 
     public List<DJAccountOutputDto> getAllDJs() {
@@ -41,8 +46,8 @@ public class DJService {
         return djAccountOutputDtos;
     }
 
-    public DJAccountOutputDto getDJById(Long id) {
-        Optional<DJ> optionalDJ = djRepository.findById(id);
+    public DJAccountOutputDto getDJByUserId(Long id) {
+        Optional<DJ> optionalDJ = Optional.ofNullable(djRepository.findByUserId(id));
         if(optionalDJ.isEmpty()) {
             throw new RecordNotFoundException("No DJ found with this id");
         }
@@ -50,17 +55,17 @@ public class DJService {
         return makeTheDto(d);
     }
 
+    // TO-DO : aanmaken van nieuwe user doen via user-service. + password-encoder.
     public DJAccountOutputDto createDJ(DJAccountInputDto djAccountInputDto) {
         DJ d = new DJ();
-        User u = new User();
-        Role r = new Role();
-        r.setRoleName("ROLE_USER");
         d = setOrUpdateDJObject(djAccountInputDto, d);
-        u = setOrUpdateUserObject(djAccountInputDto, u, r);
+        UserInputDto userInputDto = new UserInputDto();
+        userInputDto.setEmail(djAccountInputDto.getEmail());
+        userInputDto.setPassword(djAccountInputDto.getPassword());
+        userController.createUser(userInputDto);
+        User u = userRepository.findByEmail(userInputDto.getEmail());
         d.setUser(u);
         try {
-            roleRepository.save(r);
-            userRepository.save(u);
             djRepository.save(d);
             return makeTheDto(d);
         } catch (DataIntegrityViolationException e) {
@@ -83,13 +88,6 @@ public class DJService {
         d.setFirstName(djAccountInputDto.getFirstName());
         d.setLastName(djAccountInputDto.getLastName());
         return d;
-    }
-
-    public User setOrUpdateUserObject (DJAccountInputDto djAccountInputDto, User u, Role r) {
-        u.setEmail(djAccountInputDto.getEmail());
-        u.setPassword(djAccountInputDto.getPassword());
-        u.setRole(r);
-        return u;
     }
 
 

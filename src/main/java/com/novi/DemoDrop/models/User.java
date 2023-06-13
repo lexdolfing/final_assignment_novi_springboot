@@ -14,6 +14,7 @@ public class User {
 
     @OneToOne
     private Role role;
+    private boolean enabled = true;
 
 
 
@@ -54,4 +55,11 @@ public class User {
         this.role = role;
     }
 
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
 }

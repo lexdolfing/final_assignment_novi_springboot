@@ -24,9 +24,9 @@ public class DJController {
         return ResponseEntity.ok(djAccountOutputDtos);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<DJAccountOutputDto> getDJById(@PathVariable Long id) {
-        DJAccountOutputDto djAccountOutputDto = djService.getDJById(id);
+    @GetMapping("/{userId}")
+    public ResponseEntity<DJAccountOutputDto> getDJByUserId(@PathVariable Long userId) {
+        DJAccountOutputDto djAccountOutputDto = djService.getDJByUserId(userId);
         return ResponseEntity.ok(djAccountOutputDto);
     }
 
@@ -35,11 +35,5 @@ public class DJController {
         DJAccountOutputDto djAccountOutputDto = djService.createDJ(djAccountInputDto);
         return ResponseEntity.ok(djAccountOutputDto);
     }
-
-
-    // Toevoegen afhankelijk van functies in front-end:
-    // 1. put voor updaten informatie
-    // 2. Delete voor verwijderen account.
-
 
 }

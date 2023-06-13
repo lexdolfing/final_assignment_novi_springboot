@@ -7,7 +7,7 @@ public class DemoInputDto {
     private String artistName;
     private String songName;
     private String email;
-    private byte[] mp3File;
+    private String fileName;
     private String songElaboration;
     private Long djId;
 
@@ -28,10 +28,6 @@ public class DemoInputDto {
         return email;
     }
 
-    public byte[] getMp3File() {
-        return mp3File;
-    }
-
     public String getSongElaboration() {
         return songElaboration;
     }
@@ -48,10 +44,6 @@ public class DemoInputDto {
         this.email = email;
     }
 
-    public void setMp3File(byte[] mp3File) {
-        this.mp3File = mp3File;
-    }
-
     public void setSongElaboration(String songElaboration) {
         this.songElaboration = songElaboration;
     }
@@ -62,5 +54,13 @@ public class DemoInputDto {
 
     public void setDjId(Long djId) {
         this.djId = djId;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 }

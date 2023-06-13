@@ -9,8 +9,9 @@ import jakarta.persistence.OneToOne;
 public class UserOutputDto {
 
     Long id;
-    private String password;
     private String email;
+    private String jwtToken;
+    private String password;
 
 
     private String roleName;
@@ -23,9 +24,6 @@ public class UserOutputDto {
         return id;
     }
 
-    public String getPassword() {
-        return password;
-    }
 
     public String getEmail() {
         return email;
@@ -40,9 +38,6 @@ public class UserOutputDto {
         this.id = id;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
     public void setEmail(String email) {
         this.email = email;
@@ -50,5 +45,21 @@ public class UserOutputDto {
 
     public void setRoleName(String roleName) {
         this.roleName = roleName;
+    }
+
+    public String getJwtToken() {
+        return jwtToken;
+    }
+
+    public void setJwtToken(String jwtToken) {
+        this.jwtToken = jwtToken;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

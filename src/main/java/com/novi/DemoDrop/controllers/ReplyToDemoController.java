@@ -24,13 +24,6 @@ public class ReplyToDemoController {
         return ResponseEntity.ok(replyToDemoOutputDto);
     }
 
-    // Deze gaat weg, mag nooit gebruikt worden
-    @PostMapping
-    public ResponseEntity<Object> createReply(@RequestBody ReplyToDemoInputDto replyToDemoInputDto) {
-        ReplyToDemoOutputDto replyToDemoOutputDto = replyToDemoService.createReply(replyToDemoInputDto);
-        return ResponseEntity.ok(replyToDemoOutputDto);
-    }
-
     // The method below creates a Reply and assigns it immediately to the demo with id in the url
     @PostMapping("/{id}")
     public ResponseEntity<Object> createAndAssignReply(@PathVariable Long id, @RequestBody ReplyToDemoInputDto replyToDemoInputDto) {
@@ -53,15 +46,5 @@ public class ReplyToDemoController {
             throw new RecordNotFoundException("No record found with this id");
         }
     }
-
-
-
-    //Welke requests gaan hiervoor nodig zijn?
-    // 1. v get request voor de DJ (en voor admin?)
-    // 2. v Post request voor admin
-    // 3. v update request voor admin
-    // 4. v delete request voor admin
-    // 5. Moet er een algemene get request komen? Volgens mij niet
-
 
 }

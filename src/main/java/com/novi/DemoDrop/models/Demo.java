@@ -1,6 +1,7 @@
 package com.novi.DemoDrop.models;
 
 
+import com.novi.DemoDrop.Dto.OutputDto.FileUploadResponse;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -13,11 +14,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.Parameter;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 
-//TO-DO
-// 1. voeg oneToMany relatie toe met DJ
-// 2. oneToOne relatie met ReplyToDemo
 @Entity
 @Table(name= "demos")
 public class Demo {
@@ -40,7 +37,7 @@ public class Demo {
     private String songName;
     private String email;
     @Column(name= "mp3_file")
-    private byte[] mp3File;
+    private String fileName;
     @Column(name= "song_elaboration")
     private String songElaboration;
 
@@ -52,6 +49,8 @@ public class Demo {
     @ManyToOne
     @LazyCollection(LazyCollectionOption.FALSE)
     private TalentManager talentManager;
+
+
 
 
     public Demo() {}
@@ -72,9 +71,7 @@ public class Demo {
         return email;
     }
 
-    public byte[] getMp3File() {
-        return mp3File;
-    }
+
 
     public String getSongElaboration() {
         return songElaboration;
@@ -100,9 +97,7 @@ public class Demo {
         this.email = email;
     }
 
-    public void setMp3File(byte[] mp3File) {
-        this.mp3File = mp3File;
-    }
+
 
     public void setSongElaboration(String songElaboration) {
         this.songElaboration = songElaboration;
@@ -126,5 +121,13 @@ public class Demo {
 
     public void setTalentManager(TalentManager talentManager) {
         this.talentManager = talentManager;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 }

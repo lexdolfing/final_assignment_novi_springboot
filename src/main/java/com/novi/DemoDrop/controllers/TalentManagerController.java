@@ -32,6 +32,12 @@ public class TalentManagerController {
         return ResponseEntity.ok(talentManagerOutputDto);
     }
 
+    @GetMapping("/userid/{userId}")
+    public ResponseEntity<TalentManagerOutputDto> getTalentManagerByUserId(@PathVariable Long userId) {
+        TalentManagerOutputDto talentManagerOutputDto = talentManagerService.getTalentManagerByUserId(userId);
+        return ResponseEntity.ok(talentManagerOutputDto);
+    }
+
     @PostMapping
     public ResponseEntity<TalentManagerOutputDto> createManager(@RequestBody TalentManagerInputDto talentManagerInputDto) {
         TalentManagerOutputDto talentManagerOutputDto = talentManagerService.createManager(talentManagerInputDto);

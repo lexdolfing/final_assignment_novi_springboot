@@ -1,6 +1,8 @@
 package com.novi.DemoDrop.models;
 
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -19,6 +21,7 @@ public class TalentManager extends Account {
     private List<ReplyToDemo> listOfReplies;
 
     public TalentManager() {
+        this.listOfReplies = new ArrayList<>();
     }
 
     public Long getId() {

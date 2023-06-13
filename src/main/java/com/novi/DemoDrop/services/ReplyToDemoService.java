@@ -99,7 +99,7 @@ public class ReplyToDemoService {
         replyToDemoOutputDto.setAdminComments(r.getAdminComments());
         replyToDemoOutputDto.setAdminDecision(r.getAdminDecision());
         if(r.getDemo() != null) {
-            replyToDemoOutputDto.setDemoID(r.getDemo().getId());
+            replyToDemoOutputDto.setDemoId(r.getDemo().getId());
         }
         if(r.getTalentManager() != null){
             replyToDemoOutputDto.setTalentManagerId(r.getTalentManager().getId());
@@ -117,8 +117,10 @@ public class ReplyToDemoService {
         if(replyToDemoInputDto.getAdminComments() != null) {
             r.setAdminComments(replyToDemoInputDto.getAdminComments());
         }
-        if(replyToDemoInputDto.getDemo() != null ) {
-            r.setDemo(replyToDemoInputDto.getDemo());
+        if(replyToDemoInputDto.getDemoId() != null ) {
+            Optional<Demo> optionalDemo = demoRepository.findById(replyToDemoInputDto.getDemoId());
+            Demo d = optionalDemo.get();
+            r.setDemo(d);
         }
 
         return r;
