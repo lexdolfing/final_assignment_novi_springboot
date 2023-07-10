@@ -1,6 +1,7 @@
 package com.novi.DemoDrop.controllers;
 
 import com.novi.DemoDrop.Dto.InputDto.DJAccountInputDto;
+import com.novi.DemoDrop.Dto.InputDto.UserInputDto;
 import com.novi.DemoDrop.Dto.OutputDto.DJAccountOutputDto;
 import com.novi.DemoDrop.services.DJService;
 import org.springframework.http.ResponseEntity;
@@ -8,14 +9,16 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 @CrossOrigin
-@RequestMapping("dj")
+@RequestMapping("djs")
 @RestController
 public class DJController {
 
     private final DJService djService;
+    private final UserController userController;
 
-    public DJController(DJService djService) {
+    public DJController(DJService djService, UserController userController) {
         this.djService = djService;
+        this.userController = userController;
     }
 
     @GetMapping
@@ -32,6 +35,10 @@ public class DJController {
 
     @PostMapping
     public ResponseEntity<DJAccountOutputDto> createDJ(@RequestBody DJAccountInputDto djAccountInputDto) {
+        UserInputDto userInputDto = new UserInputDto();
+        userInputDto.setEmail(djAccountInputDto.getEmail());
+        userInputDto.setPassword(djAccountInputDto.getPassword());
+        userController.createUser(userInputDto);
         DJAccountOutputDto djAccountOutputDto = djService.createDJ(djAccountInputDto);
         return ResponseEntity.ok(djAccountOutputDto);
     }

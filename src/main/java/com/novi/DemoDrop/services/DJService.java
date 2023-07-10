@@ -55,15 +55,10 @@ public class DJService {
         return makeTheDto(d);
     }
 
-    // TO-DO : aanmaken van nieuwe user doen via user-service. + password-encoder.
     public DJAccountOutputDto createDJ(DJAccountInputDto djAccountInputDto) {
         DJ d = new DJ();
         d = setOrUpdateDJObject(djAccountInputDto, d);
-        UserInputDto userInputDto = new UserInputDto();
-        userInputDto.setEmail(djAccountInputDto.getEmail());
-        userInputDto.setPassword(djAccountInputDto.getPassword());
-        userController.createUser(userInputDto);
-        User u = userRepository.findByEmail(userInputDto.getEmail());
+        User u = userRepository.findByEmail(djAccountInputDto.getEmail());
         d.setUser(u);
         try {
             djRepository.save(d);
