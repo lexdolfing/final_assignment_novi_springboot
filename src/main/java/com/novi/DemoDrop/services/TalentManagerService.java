@@ -89,7 +89,7 @@ public class TalentManagerService {
     }
 
     public TalentManagerOutputDto getTalentManagerByUserId(Long userId) {
-        Optional<TalentManager> optionalTalentManager = Optional.ofNullable(talentManagerRepository.findByUserId(userId));
+        Optional<TalentManager> optionalTalentManager = talentManagerRepository.findByUserId(userId);
         if(optionalTalentManager.isEmpty()) {
             throw new RecordNotFoundException("No TalentManager found with this id");
         }

@@ -43,7 +43,7 @@ public class DJService {
     }
 
     public DJAccountOutputDto getDJByUserId(Long id) {
-        Optional<DJ> optionalDJ = Optional.ofNullable(djRepository.findByUserId(id));
+        Optional<DJ> optionalDJ = djRepository.findByUserId(id);
         if(optionalDJ.isEmpty()) {
             throw new RecordNotFoundException("No DJ found with this id");
         }

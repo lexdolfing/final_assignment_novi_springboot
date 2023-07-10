@@ -34,7 +34,7 @@ public class UserService {
         this.roleRepository = roleRepository;
     }
 
-    public List<UserOutputDto> getAllUsers(){
+    public List<UserOutputDto> getAllUsers() {
         Iterable<User> allUsers = userRepository.findAll();
         List<UserOutputDto> allUsersDto = new ArrayList<>();
 
@@ -49,18 +49,15 @@ public class UserService {
     public UserOutputDto getUserByEmail(String email) {
         new UserOutputDto();
         UserOutputDto userOutputDto;
-        Optional<User> userOptional = Optional.ofNullable(userRepository.findByEmail(email));
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            userOutputDto = makeTheDto(user);
-        } else {
-            throw new UsernameNotFoundException("No user found with this email");
-        }
+        if (userRepository.findByEmail(email) == null) throw new RecordNotFoundException();
+        User user = userRepository.findByEmail(email);
+        userOutputDto = makeTheDto(user);
+
         return userOutputDto;
     }
 
 
-    public UserOutputDto makeTheDto (User u) {
+    public UserOutputDto makeTheDto(User u) {
         UserOutputDto userOutputDto = new UserOutputDto();
         userOutputDto.setId(u.getId());
         userOutputDto.setEmail(u.getEmail());
@@ -69,7 +66,7 @@ public class UserService {
         return userOutputDto;
     }
 
-    public User makeUser (UserInputDto userInputDto) {
+    public User makeUser(UserInputDto userInputDto) {
         User user = new User();
         user.setEmail(userInputDto.getEmail());
 //        user.setRole(roleRepository.findByRoleName("ROLE_USER"));
@@ -92,14 +89,15 @@ public class UserService {
     }
 
     public String getAuthorities(String email) {
-        if (userRepository.findByEmail(email) == null) throw new org.springframework.security.core.userdetails.UsernameNotFoundException(email);
+        if (userRepository.findByEmail(email) == null)
+            throw new org.springframework.security.core.userdetails.UsernameNotFoundException(email);
         User user = userRepository.findByEmail(email);
         UserOutputDto userDto = makeTheDto(user);
         return userDto.getRoleName();
     }
 
     public String createUser(UserInputDto userDto) {
-        if(userRepository.findByEmail(userDto.getEmail()) != null){
+        if (userRepository.findByEmail(userDto.getEmail()) != null) {
             throw new BadRequestException("user with this email already exists");
         }
         String randomString = RandomStringGenerator.generateAlphaNumeric(20);
@@ -110,7 +108,8 @@ public class UserService {
 
     public void addRole(String email, String roleName) {
 
-        if (userRepository.findByEmail(email) == null) throw new org.springframework.security.core.userdetails.UsernameNotFoundException(email);
+        if (userRepository.findByEmail(email) == null)
+            throw new org.springframework.security.core.userdetails.UsernameNotFoundException(email);
         User user = userRepository.findByEmail(email);
         Role role = new Role();
         if (Objects.equals(roleName, "ROLE_USER")) {
