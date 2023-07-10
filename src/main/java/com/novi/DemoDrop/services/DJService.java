@@ -22,16 +22,12 @@ public class DJService {
 
     private final DJRepository djRepository;
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
-    private final UserService userService;
-    private final UserController userController;
 
-    public DJService(DJRepository djRepository, UserRepository userRepository, RoleRepository roleRepository, UserService userService, UserController userController) {
+
+    public DJService(DJRepository djRepository, UserRepository userRepository) {
         this.djRepository = djRepository;
         this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-        this.userService = userService;
-        this.userController = userController;
+
     }
 
     public List<DJAccountOutputDto> getAllDJs() {

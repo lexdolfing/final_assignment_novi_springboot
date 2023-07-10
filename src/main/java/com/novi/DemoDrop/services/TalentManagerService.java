@@ -24,13 +24,11 @@ import java.util.Optional;
 public class TalentManagerService {
     private final TalentManagerRepository talentManagerRepository;
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
-    private final UserController userController;
-    public TalentManagerService(TalentManagerRepository talentManagerRepository, UserRepository userRepository, RoleRepository roleRepository, UserController userController) {
+
+    public TalentManagerService(TalentManagerRepository talentManagerRepository, UserRepository userRepository) {
         this.talentManagerRepository = talentManagerRepository;
         this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-        this.userController = userController;
+
     }
 
     public List<TalentManagerOutputDto> getAllManagers(){
@@ -61,11 +59,7 @@ public class TalentManagerService {
         }
         TalentManager t = new TalentManager();
         t = setOrUpdateTalentManagerObject(talentManagerInputDto, t);
-        UserInputDto userInputDto = new UserInputDto();
-        userInputDto.setEmail(talentManagerInputDto.getEmail());
-        userInputDto.setPassword(talentManagerInputDto.getPassword());
-        userController.createUser(userInputDto);
-        User u = userRepository.findByEmail(userInputDto.getEmail());
+        User u = userRepository.findByEmail(talentManagerInputDto.getEmail());
         t.setUser(u);
         try {
             talentManagerRepository.save(t);

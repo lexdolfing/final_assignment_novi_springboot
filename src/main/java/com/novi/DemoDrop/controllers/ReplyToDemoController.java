@@ -7,7 +7,7 @@ import com.novi.DemoDrop.services.ReplyToDemoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("reply-to-demos")
+@RequestMapping("replies-to-demos")
 @RestController
 public class ReplyToDemoController {
 

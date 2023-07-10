@@ -1,8 +1,7 @@
 package com.novi.DemoDrop.controllers;
 
-import com.novi.DemoDrop.Dto.InputDto.DJAccountInputDto;
 import com.novi.DemoDrop.Dto.InputDto.TalentManagerInputDto;
-import com.novi.DemoDrop.Dto.OutputDto.DJAccountOutputDto;
+import com.novi.DemoDrop.Dto.InputDto.UserInputDto;
 import com.novi.DemoDrop.Dto.OutputDto.TalentManagerOutputDto;
 import com.novi.DemoDrop.services.TalentManagerService;
 import org.springframework.http.ResponseEntity;
@@ -11,13 +10,15 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @CrossOrigin
-@RequestMapping("talentmanager")
+@RequestMapping("talentmanagers")
 @RestController
 public class TalentManagerController {
     private final TalentManagerService talentManagerService;
+    private final UserController userController;
 
-    public TalentManagerController(TalentManagerService talentManagerService) {
+    public TalentManagerController(TalentManagerService talentManagerService, UserController userController) {
         this.talentManagerService = talentManagerService;
+        this.userController = userController;
     }
 
     @GetMapping
@@ -40,6 +41,10 @@ public class TalentManagerController {
 
     @PostMapping
     public ResponseEntity<TalentManagerOutputDto> createManager(@RequestBody TalentManagerInputDto talentManagerInputDto) {
+        UserInputDto userInputDto = new UserInputDto();
+        userInputDto.setEmail(talentManagerInputDto.getEmail());
+        userInputDto.setPassword(talentManagerInputDto.getPassword());
+        userController.createUser(userInputDto);
         TalentManagerOutputDto talentManagerOutputDto = talentManagerService.createManager(talentManagerInputDto);
         return ResponseEntity.ok(talentManagerOutputDto);
     }
