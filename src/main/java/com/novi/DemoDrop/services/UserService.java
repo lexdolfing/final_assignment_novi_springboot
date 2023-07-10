@@ -69,18 +69,9 @@ public class UserService {
     public User makeUser(UserInputDto userInputDto) {
         User user = new User();
         user.setEmail(userInputDto.getEmail());
-//        user.setRole(roleRepository.findByRoleName("ROLE_USER"));
         user.setPassword(passwordEncoder.encode(userInputDto.getPassword()));
-        // TO-DO: moet nog toegevoegd worden: API-key en enabled?
         return user;
 
-    }
-
-    public void updateUser(String email, UserInputDto newUserInfo) {
-        if (userRepository.findByEmail(email) == null) throw new RecordNotFoundException();
-        User user = userRepository.findByEmail(email);
-        user.setPassword(newUserInfo.getPassword());
-        userRepository.save(user);
     }
 
     public void deleteUser(String email) {
@@ -122,12 +113,4 @@ public class UserService {
         user.setRole(role);
         userRepository.save(user);
     }
-
-//    public void addAuthority(String username, String authority) {
-//
-//        if (!userRepository.existsById(username)) throw new org.springframework.security.core.userdetails.UsernameNotFoundException(username);
-//        User user = userRepository.findById(username).get();
-//        user.addAuthority(new Authority(username, authority));
-//        userRepository.save(user);
-//    }
 }

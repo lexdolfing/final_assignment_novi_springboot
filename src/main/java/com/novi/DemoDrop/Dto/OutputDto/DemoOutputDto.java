@@ -9,7 +9,7 @@ public class DemoOutputDto {
     private String fileName;
     private String songElaboration;
     private Long replyToDemoId;
-    private Long DjId;
+    private Long djId;
 
     public DemoOutputDto() {
     }
@@ -73,10 +73,10 @@ public class DemoOutputDto {
     }
 
     public Long getDjId() {
-        return DjId;
+        return djId;
     }
 
     public void setDjId(Long djId) {
-        DjId = djId;
+        this.djId = djId;
     }
 }

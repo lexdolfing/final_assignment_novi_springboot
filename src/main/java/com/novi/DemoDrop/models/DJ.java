@@ -47,8 +47,4 @@ public class DJ extends Account{
         this.listOfDemos.add(demo);
     }
 
-    public void setUser(User user) {
-        super.setUser(user);
-    }
-
 }

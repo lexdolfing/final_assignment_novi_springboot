@@ -122,20 +122,14 @@ public class DemoService {
     }
 
     public void assignReplyToDemo(Long DemoId, Long ReplyId) {
-        // haal Demo object op
         Optional<Demo> demoOptional = demoRepository.findById(DemoId);
-        // haal Reply object op
         Optional<ReplyToDemo> replyToDemoOptional = replyToDemoRepository.findById(ReplyId);
 
-        // Als die allenbei bestaan dan
         if (demoOptional.isPresent() && replyToDemoOptional.isPresent()) {
-            // stop ze in een normaal object
             Demo d = demoOptional.get();
             ReplyToDemo r = replyToDemoOptional.get();
-            // set remote controller bij television. Dus nu heeft television object x een remotecontroller y in zijn tabel staan.
             d.setReplyToDemo(r);
             r.setDemo(d);
-            // sla television op
             demoRepository.save(d);
             replyToDemoRepository.save(r);
         } else {
@@ -143,8 +137,6 @@ public class DemoService {
         }
 
     }
-
-    // TO-DO mappers bijwerken met file
     public DemoOutputDto makeTheDto(Demo d) {
         DemoOutputDto demoOutputDto = new DemoOutputDto();
         demoOutputDto.setId(d.getId());
@@ -165,9 +157,6 @@ public class DemoService {
         return demoOutputDto;
     }
 
-    // Bij update van demo, moet hier een getReplyToDemo uit de inputDto komen?
-    // dwz, als een reply aan een demo toegewezen wordt, moet hier de demo geupdate worden?
-
     public Demo setOrUpdateDemoObject(DemoInputDto demoInputDto, Demo d) {
         d.setArtistName(demoInputDto.getArtistName());
         d.setEmail(demoInputDto.getEmail());
@@ -178,16 +167,17 @@ public class DemoService {
 
     public Demo assignDemoToTalentManager(Demo d) {
         List<TalentManager> talentManagerList = talentManagerRepository.findAll();
-        if (talentManagerList.size() > 0) {
+        if (talentManagerList.size() == 1) {
             TalentManager t = talentManagerList.get(0);
             d.setTalentManager(t);
             addDemoToTalentManager(t, d);
-        }
-        if (talentManagerList.size() > 1) {
+        } else if (talentManagerList.size() > 1) {
             int talentManagerIndex = (getRandomNumber(talentManagerList.size()-1));
             TalentManager t = talentManagerList.get(talentManagerIndex);
             d.setTalentManager(t);
             addDemoToTalentManager(t, d);
+        } else {
+            throw new RecordNotFoundException("No Talent Managers found");
         }
         return d;
     }
