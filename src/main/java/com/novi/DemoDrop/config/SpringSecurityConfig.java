@@ -82,7 +82,6 @@ public class SpringSecurityConfig {
                 .requestMatchers(HttpMethod.GET,"/users").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.GET,"/users/{username}").hasAnyRole("ADMIN", "USER")
                 .requestMatchers(HttpMethod.DELETE, "/users/{username}").hasAnyRole("ADMIN", "USER")
-                // Je mag meerdere paths tegelijk definieren
                 .anyRequest().denyAll()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

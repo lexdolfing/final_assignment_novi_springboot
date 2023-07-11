@@ -4,7 +4,6 @@ import com.novi.DemoDrop.Dto.InputDto.UserInputDto;
 import com.novi.DemoDrop.Dto.OutputDto.UserOutputDto;
 import com.novi.DemoDrop.exceptions.BadRequestException;
 import com.novi.DemoDrop.exceptions.RecordNotFoundException;
-import com.novi.DemoDrop.exceptions.UsernameNotFoundException;
 import com.novi.DemoDrop.models.Role;
 import com.novi.DemoDrop.models.User;
 import com.novi.DemoDrop.repositories.RoleRepository;
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 public class UserService {

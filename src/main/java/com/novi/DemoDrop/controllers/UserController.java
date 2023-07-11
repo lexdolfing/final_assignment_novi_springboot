@@ -2,7 +2,6 @@ package com.novi.DemoDrop.controllers;
 
 import com.novi.DemoDrop.Dto.InputDto.UserInputDto;
 import com.novi.DemoDrop.Dto.OutputDto.UserOutputDto;
-import com.novi.DemoDrop.services.CustomUserDetailsService;
 import com.novi.DemoDrop.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,11 +19,9 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-    private final CustomUserDetailsService customUserDetailsService;
 
-    public UserController(UserService userService, CustomUserDetailsService customUserDetailsService) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.customUserDetailsService = customUserDetailsService;
     }
 
     @GetMapping(value = "")

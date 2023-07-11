@@ -2,9 +2,6 @@ package com.novi.DemoDrop.models;
 
 import jakarta.persistence.*;
 
-// To-Do:
-// 1. Voeg oneToOne relatie toe met Demo
-// 2. Voeg relatie toe met Admin (oneToMany)
 
 @Entity
 @Table(name="demo_replies")

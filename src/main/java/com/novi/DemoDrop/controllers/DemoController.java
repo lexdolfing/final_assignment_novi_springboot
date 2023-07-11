@@ -1,9 +1,7 @@
 package com.novi.DemoDrop.controllers;
 
 import com.novi.DemoDrop.Dto.InputDto.DemoInputDto;
-import com.novi.DemoDrop.Dto.InputDto.IdInputDto;
 import com.novi.DemoDrop.Dto.OutputDto.DemoOutputDto;
-import com.novi.DemoDrop.exceptions.BadRequestException;
 import com.novi.DemoDrop.exceptions.RecordNotFoundException;
 import com.novi.DemoDrop.Dto.OutputDto.FileUploadResponse;
 import com.novi.DemoDrop.models.Demo;
@@ -12,15 +10,12 @@ import com.novi.DemoDrop.services.DemoService;
 import org.springframework.core.io.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.*;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;

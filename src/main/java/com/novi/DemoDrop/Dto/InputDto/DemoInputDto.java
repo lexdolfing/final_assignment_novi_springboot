@@ -1,7 +1,5 @@
 package com.novi.DemoDrop.Dto.InputDto;
 
-import com.novi.DemoDrop.models.ReplyToDemo;
-
 public class DemoInputDto {
 
     private String artistName;
@@ -58,9 +56,5 @@ public class DemoInputDto {
 
     public String getFileName() {
         return fileName;
-    }
-
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
     }
 }

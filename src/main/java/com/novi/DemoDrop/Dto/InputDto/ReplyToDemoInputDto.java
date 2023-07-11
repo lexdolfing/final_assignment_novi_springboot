@@ -1,7 +1,6 @@
 package com.novi.DemoDrop.Dto.InputDto;
 
-import com.novi.DemoDrop.models.Demo;
-import com.novi.DemoDrop.models.ReplyToDemo;
+
 
 public class ReplyToDemoInputDto {
     private String adminDecision;
