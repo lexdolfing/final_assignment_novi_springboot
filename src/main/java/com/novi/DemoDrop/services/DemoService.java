@@ -177,10 +177,7 @@ public class DemoService {
                 throw new RecordNotFoundException("No DJ with this id found");
             }
             DJ dj = optionalDJ.get();
-            dj.addDemoToListOfDemos(d);
-            djRepository.save(dj);
             d.setDj(dj);
-
         }
         return d;
     }

@@ -8,6 +8,7 @@ import com.novi.DemoDrop.models.DJ;
 import com.novi.DemoDrop.models.Demo;
 import com.novi.DemoDrop.models.User;
 import com.novi.DemoDrop.repositories.DJRepository;
+import com.novi.DemoDrop.repositories.DemoRepository;
 import com.novi.DemoDrop.repositories.UserRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -24,12 +25,15 @@ public class DJService {
 
     private final DemoService demoService;
 
+    private final DemoRepository demoRepository;
 
-    public DJService(DJRepository djRepository, UserRepository userRepository, DemoService demoService) {
+
+    public DJService(DJRepository djRepository, UserRepository userRepository, DemoService demoService, DemoRepository demoRepository) {
         this.djRepository = djRepository;
         this.userRepository = userRepository;
 
         this.demoService = demoService;
+        this.demoRepository = demoRepository;
     }
 
     public List<DJAccountOutputDto> getAllDJs() {
@@ -58,7 +62,7 @@ public class DJService {
         List<DemoOutputDto> allMyDemosDto = new ArrayList<>();
         if(optionalDj.isPresent()) {
             DJ dj = optionalDj.get();
-            List<Demo> myDemos = dj.getListOfDemos();
+            List<Demo> myDemos = demoRepository.findAllDemosByDj(dj);
             for (Demo d : myDemos) {
                 DemoOutputDto demoOutputDto;
                 demoOutputDto = demoService.makeTheDto(d);

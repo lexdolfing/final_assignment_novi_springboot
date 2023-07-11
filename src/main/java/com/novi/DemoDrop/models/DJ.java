@@ -13,9 +13,6 @@ public class DJ extends Account{
 
     private String artistName;
 
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @OneToMany(mappedBy="dj")
-    private List<Demo> listOfDemos;
 
     public DJ() {
     }
@@ -28,9 +25,6 @@ public class DJ extends Account{
         return artistName;
     }
 
-    public List<Demo> getListOfDemos() {
-        return listOfDemos;
-    }
 
     public void setId(Long id) {
         this.id = id;
@@ -40,11 +34,5 @@ public class DJ extends Account{
         this.artistName = artistName;
     }
 
-    public void setListOfDemos(List<Demo> listOfDemos) {
-        this.listOfDemos = listOfDemos;
-    }
-    public void addDemoToListOfDemos (Demo demo) {
-        this.listOfDemos.add(demo);
-    }
 
 }
