@@ -4,6 +4,7 @@ import com.novi.DemoDrop.Dto.InputDto.TalentManagerInputDto;
 import com.novi.DemoDrop.Dto.InputDto.UserInputDto;
 import com.novi.DemoDrop.Dto.OutputDto.TalentManagerOutputDto;
 import com.novi.DemoDrop.services.TalentManagerService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,7 +47,7 @@ public class TalentManagerController {
         userInputDto.setPassword(talentManagerInputDto.getPassword());
         userController.createUser(userInputDto);
         TalentManagerOutputDto talentManagerOutputDto = talentManagerService.createManager(talentManagerInputDto);
-        return ResponseEntity.ok(talentManagerOutputDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(talentManagerOutputDto);
     }
 
 }

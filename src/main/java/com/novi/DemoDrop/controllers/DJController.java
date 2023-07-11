@@ -5,6 +5,7 @@ import com.novi.DemoDrop.Dto.InputDto.UserInputDto;
 import com.novi.DemoDrop.Dto.OutputDto.DJAccountOutputDto;
 import com.novi.DemoDrop.Dto.OutputDto.DemoOutputDto;
 import com.novi.DemoDrop.services.DJService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,7 +49,7 @@ public class DJController {
         userInputDto.setPassword(djAccountInputDto.getPassword());
         userController.createUser(userInputDto);
         DJAccountOutputDto djAccountOutputDto = djService.createDJ(djAccountInputDto);
-        return ResponseEntity.ok(djAccountOutputDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(djAccountOutputDto);
     }
 
 }

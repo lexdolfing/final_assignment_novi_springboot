@@ -11,9 +11,7 @@ import com.novi.DemoDrop.repositories.DemoRepository;
 import com.novi.DemoDrop.services.DemoService;
 import org.springframework.core.io.Resource;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -69,7 +67,7 @@ public class DemoController {
     @PostMapping
     public ResponseEntity<Object> createDemo(@RequestBody DemoInputDto demoInputDto) {
         DemoOutputDto demoOutputDto = demoService.createDemo(demoInputDto);
-        return ResponseEntity.ok(demoOutputDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(demoOutputDto);
     }
 
     @PostMapping("/mp3file")
@@ -101,7 +99,7 @@ public class DemoController {
                 isDeleted = demoService.deleteDemo(id);
         }
         if (isDeleted) {
-            return ResponseEntity.ok().body("Element is deleted");
+            return ResponseEntity.noContent().build();
         } else {
             throw new RecordNotFoundException("No record found with this id");
         }
