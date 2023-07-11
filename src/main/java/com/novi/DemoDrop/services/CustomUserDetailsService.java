@@ -20,13 +20,10 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) {
         UserOutputDto useroutputDto = userService.getUserByEmail(username);
-
-
-        String password = useroutputDto.getPassword();
         String roleName = useroutputDto.getRoleName();
         SimpleGrantedAuthority grantedAuthorities = new SimpleGrantedAuthority(roleName);
 
-        return new org.springframework.security.core.userdetails.User(username, password, Collections.singleton(grantedAuthorities));
+        return new org.springframework.security.core.userdetails.User(username, "", Collections.singleton(grantedAuthorities));
     }
 
 }

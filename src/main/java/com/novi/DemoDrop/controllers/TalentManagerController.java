@@ -2,7 +2,9 @@ package com.novi.DemoDrop.controllers;
 
 import com.novi.DemoDrop.Dto.InputDto.TalentManagerInputDto;
 import com.novi.DemoDrop.Dto.InputDto.UserInputDto;
+import com.novi.DemoDrop.Dto.OutputDto.DemoOutputDto;
 import com.novi.DemoDrop.Dto.OutputDto.TalentManagerOutputDto;
+import com.novi.DemoDrop.models.Demo;
 import com.novi.DemoDrop.services.TalentManagerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +41,13 @@ public class TalentManagerController {
         TalentManagerOutputDto talentManagerOutputDto = talentManagerService.getTalentManagerByUserId(userId);
         return ResponseEntity.ok(talentManagerOutputDto);
     }
+
+    @GetMapping("/{talentManagerId}/assigned-demos")
+    public ResponseEntity<List<DemoOutputDto>> getDemosByTalentManager(@PathVariable Long talentManagerId){
+        List<DemoOutputDto> demoOutputDtos = talentManagerService.getDemosByTalentManager(talentManagerId);
+        return ResponseEntity.ok(demoOutputDtos);
+    }
+
 
     @PostMapping
     public ResponseEntity<TalentManagerOutputDto> createManager(@RequestBody TalentManagerInputDto talentManagerInputDto) {

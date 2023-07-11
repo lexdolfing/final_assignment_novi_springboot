@@ -52,7 +52,6 @@ public class UserService {
         if (userRepository.findByEmail(email) == null) throw new RecordNotFoundException();
         User user = userRepository.findByEmail(email);
         userOutputDto = makeTheDto(user);
-
         return userOutputDto;
     }
 
@@ -62,7 +61,6 @@ public class UserService {
         userOutputDto.setId(u.getId());
         userOutputDto.setEmail(u.getEmail());
         userOutputDto.setRoleName(u.getRole().getRoleName());
-        userOutputDto.setPassword(u.getPassword());
         return userOutputDto;
     }
 

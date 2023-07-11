@@ -59,7 +59,6 @@ public class ReplyToDemoService {
             Demo d = optionalDemo.get();
             TalentManager t = optionalTalentManager.get();
             r.setTalentManager(t);
-            t.addReplyToListOfReplies(r);
             replyToDemoRepository.save(r);
             d.setReplyToDemo(r);
             demoRepository.save(d);

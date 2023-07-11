@@ -92,7 +92,7 @@ public class DemoService {
             d = setOrUpdateDemoObject(demoInputDto, d);
             d = assignDemoToTalentManager(d);
             d = assignDemoToDJ(d, demoInputDto);
-            demoRepository.save(d);
+            d = demoRepository.save(d);
             return makeTheDto(d);
     }
 
@@ -154,12 +154,10 @@ public class DemoService {
         if (talentManagerList.size() == 1) {
             TalentManager t = talentManagerList.get(0);
             d.setTalentManager(t);
-            addDemoToTalentManager(t, d);
         } else if (talentManagerList.size() > 1) {
             int talentManagerIndex = (getRandomNumber(talentManagerList.size()-1));
             TalentManager t = talentManagerList.get(talentManagerIndex);
             d.setTalentManager(t);
-            addDemoToTalentManager(t, d);
         } else {
             throw new RecordNotFoundException("No Talent Managers found");
         }
@@ -171,14 +169,6 @@ public class DemoService {
         return random.nextInt(max);
     }
 
-    public void addDemoToTalentManager(TalentManager t, Demo d) {
-        try {
-            t.addDemoToListOfAssignedDemos(d);
-            talentManagerRepository.save(t);
-        } catch (DataIntegrityViolationException e) {
-            throw new RecordNotFoundException("Error saving demo to database");
-        }
-    }
 
     public Demo assignDemoToDJ(Demo d, DemoInputDto demoInputDto) {
         if (demoInputDto.getDjId() != null) {

@@ -10,9 +10,6 @@ public class UserOutputDto {
 
     Long id;
     private String email;
-    private String jwtToken;
-    private String password;
-
 
     private String roleName;
 
@@ -47,19 +44,4 @@ public class UserOutputDto {
         this.roleName = roleName;
     }
 
-    public String getJwtToken() {
-        return jwtToken;
-    }
-
-    public void setJwtToken(String jwtToken) {
-        this.jwtToken = jwtToken;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }
