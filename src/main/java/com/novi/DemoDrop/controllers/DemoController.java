@@ -53,13 +53,6 @@ public class DemoController {
         return ResponseEntity.ok(demoOutputDto);
     }
 
-    @GetMapping("/mydemos/{djId}")
-    public ResponseEntity<List<DemoOutputDto>> getAllMyDemos(@PathVariable Long djId) {
-        List<DemoOutputDto> demoOutputDtos = demoService.getAllMyDemos(djId);
-        return ResponseEntity.ok(demoOutputDtos);
-
-    }
-
     @GetMapping("/{demoId}/download")
     public ResponseEntity<Resource> downloadMp3File(@PathVariable Long demoId, HttpServletRequest request) {
         Resource resource = demoService.downloadFile(demoId);

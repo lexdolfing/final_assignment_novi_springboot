@@ -77,22 +77,6 @@ public class DemoService {
         return allDemosDto;
     }
 
-    public List<DemoOutputDto> getAllMyDemos(Long djId) {
-        Optional<DJ> optionalDj = djRepository.findById(djId);
-        List<DemoOutputDto> allMyDemosDto = new ArrayList<>();
-        if(optionalDj.isPresent()) {
-            DJ dj = optionalDj.get();
-            List<Demo> myDemos = dj.getListOfDemos();
-            for (Demo d : myDemos) {
-                DemoOutputDto demoOutputDto;
-                demoOutputDto = makeTheDto(d);
-                allMyDemosDto.add(demoOutputDto);
-            }
-          return allMyDemosDto;
-        } else {
-            throw new RecordNotFoundException("No DJ found with this ID");
-        }
-    }
 
     public DemoOutputDto getDemoById(Long id) {
         Optional<Demo> demoOptional = demoRepository.findById(id);

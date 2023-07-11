@@ -3,6 +3,7 @@ package com.novi.DemoDrop.controllers;
 import com.novi.DemoDrop.Dto.InputDto.DJAccountInputDto;
 import com.novi.DemoDrop.Dto.InputDto.UserInputDto;
 import com.novi.DemoDrop.Dto.OutputDto.DJAccountOutputDto;
+import com.novi.DemoDrop.Dto.OutputDto.DemoOutputDto;
 import com.novi.DemoDrop.services.DJService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +32,13 @@ public class DJController {
     public ResponseEntity<DJAccountOutputDto> getDJByUserId(@PathVariable Long userId) {
         DJAccountOutputDto djAccountOutputDto = djService.getDJByUserId(userId);
         return ResponseEntity.ok(djAccountOutputDto);
+    }
+
+    @GetMapping("/{djId}/mydemos")
+    public ResponseEntity<List<DemoOutputDto>> getAllMyDemos(@PathVariable Long djId) {
+        List<DemoOutputDto> demoOutputDtos = djService.getAllMyDemos(djId);
+        return ResponseEntity.ok(demoOutputDtos);
+
     }
 
     @PostMapping

@@ -1,14 +1,13 @@
 package com.novi.DemoDrop.services;
 
 import com.novi.DemoDrop.Dto.InputDto.DJAccountInputDto;
-import com.novi.DemoDrop.Dto.InputDto.UserInputDto;
 import com.novi.DemoDrop.Dto.OutputDto.DJAccountOutputDto;
-import com.novi.DemoDrop.controllers.UserController;
+import com.novi.DemoDrop.Dto.OutputDto.DemoOutputDto;
 import com.novi.DemoDrop.exceptions.RecordNotFoundException;
 import com.novi.DemoDrop.models.DJ;
+import com.novi.DemoDrop.models.Demo;
 import com.novi.DemoDrop.models.User;
 import com.novi.DemoDrop.repositories.DJRepository;
-import com.novi.DemoDrop.repositories.RoleRepository;
 import com.novi.DemoDrop.repositories.UserRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -23,11 +22,14 @@ public class DJService {
     private final DJRepository djRepository;
     private final UserRepository userRepository;
 
+    private final DemoService demoService;
 
-    public DJService(DJRepository djRepository, UserRepository userRepository) {
+
+    public DJService(DJRepository djRepository, UserRepository userRepository, DemoService demoService) {
         this.djRepository = djRepository;
         this.userRepository = userRepository;
 
+        this.demoService = demoService;
     }
 
     public List<DJAccountOutputDto> getAllDJs() {
@@ -49,6 +51,23 @@ public class DJService {
         }
         DJ d = optionalDJ.get();
         return makeTheDto(d);
+    }
+
+    public List<DemoOutputDto> getAllMyDemos(Long djId) {
+        Optional<DJ> optionalDj = djRepository.findById(djId);
+        List<DemoOutputDto> allMyDemosDto = new ArrayList<>();
+        if(optionalDj.isPresent()) {
+            DJ dj = optionalDj.get();
+            List<Demo> myDemos = dj.getListOfDemos();
+            for (Demo d : myDemos) {
+                DemoOutputDto demoOutputDto;
+                demoOutputDto = demoService.makeTheDto(d);
+                allMyDemosDto.add(demoOutputDto);
+            }
+            return allMyDemosDto;
+        } else {
+            throw new RecordNotFoundException("No DJ found with this ID");
+        }
     }
 
     public DJAccountOutputDto createDJ(DJAccountInputDto djAccountInputDto) {
