@@ -50,9 +50,6 @@ public class Demo {
     @LazyCollection(LazyCollectionOption.FALSE)
     private TalentManager talentManager;
 
-
-
-
     public Demo() {}
 
     public Long getId() {

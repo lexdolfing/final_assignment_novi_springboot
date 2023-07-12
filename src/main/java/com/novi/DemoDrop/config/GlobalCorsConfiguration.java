@@ -13,6 +13,7 @@ In deze applictie staat alsnog wel boven elke klasse ter demonstratie.
 Vergeet niet om in de security config ook de ".cors()" optie aan te zetten.
  */
 
+
 @Configuration
 public class GlobalCorsConfiguration
 {

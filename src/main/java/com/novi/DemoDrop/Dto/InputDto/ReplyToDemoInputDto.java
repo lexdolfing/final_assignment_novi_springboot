@@ -1,14 +1,18 @@
 package com.novi.DemoDrop.Dto.InputDto;
 
 
+import org.jetbrains.annotations.NotNull;
 
 public class ReplyToDemoInputDto {
+    @NotNull
     private String adminDecision;
+    @NotNull
     private String adminComments;
+    @NotNull
     private boolean hasBeenRepliedTo;
-
+    @NotNull
     private Long talentManagerId;
-
+    @NotNull
     private Long demoId;
 
     public ReplyToDemoInputDto() {

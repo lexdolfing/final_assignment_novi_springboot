@@ -1,11 +1,19 @@
 package com.novi.DemoDrop.Dto.InputDto;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Size;
+import org.jetbrains.annotations.NotNull;
+
 public class DJAccountInputDto {
+
     private String firstName;
+
     private String lastName;
+
     private String artistName;
 
     private String password;
+
     private String email;
 
     public DJAccountInputDto() {

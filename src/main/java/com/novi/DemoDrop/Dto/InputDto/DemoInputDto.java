@@ -1,12 +1,20 @@
 package com.novi.DemoDrop.Dto.InputDto;
 
+import jakarta.validation.constraints.Email;
+import org.jetbrains.annotations.NotNull;
+
 public class DemoInputDto {
 
+    @NotNull
     private String artistName;
+    @NotNull
     private String songName;
+    @NotNull
+    @Email
     private String email;
     private String fileName;
     private String songElaboration;
+    @NotNull
     private Long djId;
 
 
