@@ -5,15 +5,17 @@ import jakarta.validation.constraints.Size;
 import org.jetbrains.annotations.NotNull;
 
 public class DJAccountInputDto {
-
+    @NotNull
     private String firstName;
-
+    @NotNull
     private String lastName;
-
+    @NotNull
     private String artistName;
-
+    @NotNull
+    @Size(min = 6)
     private String password;
-
+    @NotNull
+    @Email
     private String email;
 
     public DJAccountInputDto() {

@@ -1,11 +1,21 @@
 package com.novi.DemoDrop.Dto.InputDto;
 
-public class TalentManagerInputDto {
-    private String managerName;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Size;
+import org.jetbrains.annotations.NotNull;
 
+public class TalentManagerInputDto {
+    @NotNull
+    private String managerName;
+    @NotNull
     protected String firstName;
+    @NotNull
     protected String lastName;
+    @NotNull
+    @Email
     private String email;
+    @NotNull
+    @Size(min = 6)
     private String password;
 
     public TalentManagerInputDto() {

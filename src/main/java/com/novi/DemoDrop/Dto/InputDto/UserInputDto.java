@@ -5,9 +5,12 @@ import com.novi.DemoDrop.models.Role;
 import com.novi.DemoDrop.models.TalentManager;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.OneToOne;
+import org.jetbrains.annotations.NotNull;
 
 public class UserInputDto {
+    @NotNull
     private String password;
+    @NotNull
     private String email;
     public String apikey;
 
