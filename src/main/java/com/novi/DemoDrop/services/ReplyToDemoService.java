@@ -49,7 +49,6 @@ public class ReplyToDemoService {
     }
 
 
-//TO-DO hier toevoegen dat een reply wordt toegevoegd aan de lijst met replies van de talentmanager.
     public ReplyToDemoOutputDto createAndAssignReply(Long id, ReplyToDemoInputDto replyToDemoInputDto) {
         ReplyToDemo r = new ReplyToDemo();
         r = setOrUpdateReplyObject(replyToDemoInputDto, r);

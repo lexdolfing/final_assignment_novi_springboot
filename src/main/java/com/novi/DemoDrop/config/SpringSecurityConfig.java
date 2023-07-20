@@ -58,7 +58,7 @@ public class SpringSecurityConfig {
                 .cors().and()
                 .authorizeHttpRequests()
                 // Wanneer je deze uncomment, staat je hele security open. Je hebt dan alleen nog een jwt nodig.
-//                .requestMatchers("/**").permitAll()
+                .requestMatchers("/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/authenticate").permitAll()
                 .requestMatchers("/authenticated").authenticated()
                 .requestMatchers(HttpMethod.GET,"/demos").hasRole("ADMIN")
