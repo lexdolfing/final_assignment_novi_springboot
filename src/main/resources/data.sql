@@ -21,5 +21,3 @@ VALUES (101, 'Annie', 'Schilder', 'Schilder Talents', 102);
 
 INSERT INTO demos (id, email, artist_name, song_name, song_elaboration, dj_id, talent_manager_id)
 VALUES (101, 'test@email.com', 'DJ Dolfing', 'Electric slide', 'I was so inspired by old school house music', 101, 101);
-
-

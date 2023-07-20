@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -65,14 +66,11 @@ public class ReplyToDemoIntegrationTest {
     @BeforeEach
     void setUp() {
         dJ1 = new DJ();
-        dJ1.setListOfDemos(new ArrayList<>());
 
         talentManager1 = new TalentManager();
         talentManager1.setManagerName("Jerney Kaagman");
         talentManager1.setFirstName("Jerney");
         talentManager1.setLastName("Kaagman");
-        talentManager1.setListOfReplies(new ArrayList<>());
-        talentManager1.setAssignedDemos(new ArrayList<>());
 
         demo1 = new Demo();
         demo1.setArtistName("DJ Lex");
@@ -110,7 +108,7 @@ public class ReplyToDemoIntegrationTest {
     @Test
     void getReplyById() throws Exception {
 
-        mockMvc.perform(get("/reply-to-demo/" + replyToDemo1.getId()))
+        mockMvc.perform(get("/replies-to-demos/" + replyToDemo1.getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("adminDecision").value("We nemen contact met je op"))
                 .andExpect(jsonPath("hasBeenRepliedTo").value("true"))
@@ -121,10 +119,10 @@ public class ReplyToDemoIntegrationTest {
 
     @Test
     void createAndAssignReply() throws Exception {
-        mockMvc.perform(put("/reply-to-demo/" + replyToDemo1.getId().toString())
+        mockMvc.perform(put("/replies-to-demos/" + replyToDemo1.getId().toString())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(replyToDemoInputDto1)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("adminDecision").value(replyToDemoInputDto1.getAdminDecision()))
                 .andExpect(jsonPath("hasBeenRepliedTo").value(replyToDemoInputDto1.isHasBeenRepliedTo()))
                 .andExpect(jsonPath("adminComments").value(replyToDemoInputDto1.getAdminComments()))
@@ -133,10 +131,10 @@ public class ReplyToDemoIntegrationTest {
 
     @Test
     void updateReply() throws Exception {
-        mockMvc.perform(put("/reply-to-demo/" + replyToDemo1.getId().toString())
+        mockMvc.perform(put("/replies-to-demos/" + replyToDemo1.getId().toString())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(replyToDemoInputDto2)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("adminDecision").value("We komen er toch op terug"))
                 .andExpect(jsonPath("hasBeenRepliedTo").value("true"))
                 .andExpect(jsonPath("adminComments").value("Want het was toch niet goed"))
@@ -145,9 +143,8 @@ public class ReplyToDemoIntegrationTest {
 
     @Test
     void deleteReply() throws Exception {
-        mockMvc.perform(delete("/reply-to-demo/" + replyToDemo1.getId().toString()))
-                .andExpect(status().isOk());
-
+        mockMvc.perform(delete("/replies-to-demos/" + replyToDemo1.getId().toString()))
+                .andExpect(status().isNoContent());
     }
 
 }

@@ -8,14 +8,18 @@ import com.novi.DemoDrop.Dto.OutputDto.ReplyToDemoOutputDto;
 import com.novi.DemoDrop.models.Demo;
 import com.novi.DemoDrop.models.ReplyToDemo;
 import com.novi.DemoDrop.models.TalentManager;
+import com.novi.DemoDrop.services.CustomUserDetailsService;
 import com.novi.DemoDrop.services.ReplyToDemoService;
+import com.novi.DemoDrop.utils.JwtUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,6 +46,12 @@ class ReplyToDemoControllerTest {
     @MockBean
     private ReplyToDemoService replyToDemoService;
 
+    @MockBean
+    private CustomUserDetailsService customUserDetailsService;
+
+    @MockBean
+    private JwtUtil jwtUtil;
+
     TalentManager talentManager1;
     ReplyToDemo replyToDemo1;
     ReplyToDemoInputDto replyToDemoInputDto1;
@@ -55,8 +65,6 @@ class ReplyToDemoControllerTest {
         talentManager1.setFirstName("Jerney");
         talentManager1.setLastName("Kaagman");
         talentManager1.setId(101L);
-        talentManager1.setListOfReplies(new ArrayList<>());
-        talentManager1.setAssignedDemos(new ArrayList<>());
 
         replyToDemo1 = new ReplyToDemo();
         replyToDemo1.setTalentManager(talentManager1);
@@ -87,14 +95,16 @@ class ReplyToDemoControllerTest {
     }
 
     @Test
+    @WithMockUser(username= "user@emai.com", roles = "USER")
     void getReplyById() throws Exception {
         given(replyToDemoService.getReplyById(replyToDemo1.getId())).willReturn(replyToDemoOutputDto1);
 
-        mockMvc.perform(get("/reply-to-demo/101")).andExpect(status().isOk())
+        mockMvc.perform(get("/replies-to-demos/101")).andExpect(status().isOk())
                 .andExpect(jsonPath("talentManagerId").value("101"))
                 .andExpect(jsonPath("adminComments").value("Was echt een lekker nummer"))
                 .andExpect(jsonPath("adminDecision").value("We nemen contact met je op"));
     }
+
 
 
 

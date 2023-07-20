@@ -28,6 +28,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -58,13 +61,14 @@ class DemoServiceTest {
     TalentManager talentManager2;
     ReplyToDemo replyToDemo1;
 
+    private final String testFileName = "test.mp3";
+
     @BeforeEach
     void setUp() {
 
         demoService = new DemoService(demoRepository, replyToDemoRepository, talentManagerRepository, djRepository);
         dJ1 = new DJ();
         dJ1.setId(101L);
-        dJ1.setListOfDemos(new ArrayList<>());
         demoService.setFileStorageLocation("uploads");
 
 
@@ -73,16 +77,12 @@ class DemoServiceTest {
         talentManager1.setFirstName("Jerney");
         talentManager1.setLastName("Kaagman");
         talentManager1.setId(101L);
-        talentManager1.setListOfReplies(new ArrayList<>());
-        talentManager1.setAssignedDemos(new ArrayList<>());
 
         talentManager2 = new TalentManager();
         talentManager2.setManagerName("Henkjan Smits");
         talentManager2.setFirstName("Henkjan");
         talentManager2.setLastName("Smits");
         talentManager2.setId(102L);
-        talentManager2.setListOfReplies(new ArrayList<>());
-        talentManager2.setAssignedDemos(new ArrayList<>());
 
 
         replyToDemo1 = new ReplyToDemo();
@@ -159,13 +159,14 @@ class DemoServiceTest {
         //Arrange (demo1, demoInputDto1)
         DemoInputDto demoInputDto1 = new DemoInputDto();
         demoInputDto1.setArtistName("Dj Tiesto");
-        demoInputDto1.setEmail("email");
+        demoInputDto1.setEmail("user@email.com");
         demoInputDto1.setSongElaboration("Ik vind mooi");
         demoInputDto1.setSongName("10:35");
         demoInputDto1.setDjId(101L);
 
-        when(demoRepository.save(demo1)).thenReturn(demo1);
         when(djRepository.findById(101L)).thenReturn(Optional.of(dJ1));
+        when(talentManagerRepository.findAll()).thenReturn(List.of(talentManager1, talentManager2));
+        when(demoRepository.save(any(Demo.class))).thenReturn(demo1);
 
         //Act (maak outputDto)
         demoService.createDemo(demoInputDto1);
@@ -245,11 +246,6 @@ class DemoServiceTest {
 
     }
 
-    @Test
-    @Disabled
-        // TO-DO check of deze nodig is voor line coverage maar hij wordt al helemaal getest lijkt het
-    void setOrUpdateDemoObject() {
-    }
 
     @Test
     @DisplayName("should return demo with talent manager if there is one or multiple talent managers")
@@ -282,23 +278,8 @@ class DemoServiceTest {
         int returnedNumber2 = demoService.getRandomNumber(number2);
         assertTrue(returnedNumber2 == number1 || returnedNumber2 == number2 || returnedNumber2 == 0);    }
 
-    @Test
-    @Disabled
-        // TO-DO check of deze nodig is voor line coverage maar hij wordt al helemaal getest lijkt het
 
-    void addDemoToTalentManager() {
-    }
 
-    @Test
-    void testAddDemoToTalentManager_DataIntegrityViolationException() {
-        // Set up the mock to throw a DataIntegrityViolationException when talentManagerRepository.save() is called
-        doThrow(DataIntegrityViolationException.class).when(talentManagerRepository).save(talentManager1);
-
-        assertThrows(RecordNotFoundException.class, () -> demoService.addDemoToTalentManager(talentManager1, demo1));
-
-        // Verify that talentManagerRepository.save() was called
-        verify(talentManagerRepository, times(1)).save(talentManager1);
-    }
 
     @Test
     @DisplayName("should throw exception when djRepository.findDjById returns empty")
@@ -344,22 +325,6 @@ class DemoServiceTest {
         when(demoRepository.findById(demo1.getId())).thenReturn(Optional.empty());
 
         assertThrows(RecordNotFoundException.class, () -> demoService.storeMP3File(mp3FileMock, demo1.getId()));
-    }
-
-    @Test
-    void downloadFile() {
-        // Arrange
-        when(demoRepository.findById(demo1.getId())).thenReturn(Optional.ofNullable(demo1));
-
-        // Act
-        Resource foundResource = demoService.downloadFile(demo1.getId());
-
-
-        String expectedResource = "URL [file:///Users/lexdolfing/Documents/Novi/Eindopdracht/Spring%20Boot/DemoDrop/uploads/test.mp3]";
-
-        //Assert
-        assertEquals(foundResource.toString(), expectedResource);
-
     }
 
     @Test

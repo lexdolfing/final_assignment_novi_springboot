@@ -90,21 +90,17 @@ public class DJIntegrationTest {
         dJ1.setArtistName("DJ wowie");
         dJ1.setFirstName("Kees");
         dJ1.setLastName("Koos");
-        dJ1.setListOfDemos(new ArrayList<>());
 
         dJ2 = new DJ();
         dJ2.setUser(user2);
         dJ2.setArtistName("DJ amazings");
         dJ2.setFirstName("Hansie");
         dJ2.setLastName("Van Ouden Den Hollander");
-        dJ2.setListOfDemos(new ArrayList<>());
 
         talentManager1 = new TalentManager();
         talentManager1.setManagerName("Jerney Kaagman");
         talentManager1.setFirstName("Jerney");
         talentManager1.setLastName("Kaagman");
-        talentManager1.setListOfReplies(new ArrayList<>());
-        talentManager1.setAssignedDemos(new ArrayList<>());
 
         demo1 = new Demo();
         demo1.setArtistName("DJ Lex");
@@ -145,7 +141,7 @@ public class DJIntegrationTest {
 
     @Test
     void getAllDJs() throws Exception {
-        mockMvc.perform(get("/dj"))
+        mockMvc.perform(get("/djs"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(dJ1.getId()))
                 .andExpect(jsonPath("$[1].id").value(dJ2.getId()))
@@ -156,7 +152,7 @@ public class DJIntegrationTest {
 
     @Test
     void getDjById() throws Exception {
-        mockMvc.perform(get("/dj/" + dJ1.getId()))
+        mockMvc.perform(get("/djs/" + dJ1.getId()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("id").value(dJ1.getId()))
                 .andExpect(jsonPath("artistName").value(dJ1.getArtistName().toString()))
@@ -166,10 +162,10 @@ public class DJIntegrationTest {
 
     @Test
     void createDJ() throws Exception {
-        mockMvc.perform(post("/dj")
+        mockMvc.perform(post("/djs")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(djAccountInputDto1)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("firstName").value(djAccountInputDto1.getFirstName()))
                 .andExpect(jsonPath("lastName").value(djAccountInputDto1.getLastName()))
                 .andExpect(jsonPath("artistName").value(djAccountInputDto1.getArtistName()));

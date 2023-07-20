@@ -50,7 +50,7 @@ class ReplyToDemoServiceTest {
         MockitoAnnotations.openMocks(this);
         dJ1 = new DJ();
         dJ1.setId(101L);
-        dJ1.setListOfDemos(new ArrayList<>());
+
 
 
         talentManager1 = new TalentManager();
@@ -58,16 +58,12 @@ class ReplyToDemoServiceTest {
         talentManager1.setFirstName("Jerney");
         talentManager1.setLastName("Kaagman");
         talentManager1.setId(101L);
-        talentManager1.setListOfReplies(new ArrayList<>());
-        talentManager1.setAssignedDemos(new ArrayList<>());
 
         talentManager2 = new TalentManager();
         talentManager2.setManagerName("Henkjan Smits");
         talentManager2.setFirstName("Henkjan");
         talentManager2.setLastName("Smits");
         talentManager2.setId(102L);
-        talentManager2.setListOfReplies(new ArrayList<>());
-        talentManager2.setAssignedDemos(new ArrayList<>());
 
 
         replyToDemo1 = new ReplyToDemo();
@@ -217,6 +213,7 @@ class ReplyToDemoServiceTest {
         ReplyToDemo replyToDemo = new ReplyToDemo();
         when(replyToDemoRepository.findById(replyToDemo1.getId())).thenReturn(Optional.of(replyToDemo));
         when(replyToDemoRepository.save(any(ReplyToDemo.class))).thenReturn(replyToDemo);
+        when(demoRepository.findById(any(Long.class))).thenReturn(Optional.ofNullable(demo1));
 
         // Act
         ReplyToDemoOutputDto result = replyToDemoService.updateReply(replyToDemo1.getId(), inputDto);
